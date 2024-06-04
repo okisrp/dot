@@ -12,6 +12,11 @@ if [[ -x "$(command -v nvim)" ]]; then
 	export MANPAGER=""$(which nvim)" +Man!"
 fi
 
+if [[ -d "${HOME}/.config/emacs/bin" ]]; then
+	export PATH="${HOME}/.config/emacs/bin:$PATH"
+	export DOOMDIR="${HOME}/.config/doom"
+fi
+
 [[ ! -t 0 ]] && return
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
@@ -36,8 +41,9 @@ if [[ -r "/usr/share/bash_completion/bash_completion" ]]; then
 fi
 
 if [[ -x "$(command -v dircolors)" ]]; then
-	test -r "${HOME}/.dircolors" || dircolors -p > "${HOME}/.dircolors"
-	eval "$(dircolors -b "${HOME}/.dircolors")"
+	DIRCOLORS="${XDG_CONFIG_HOME}/dircolors"
+	test -r "${DIRCOLORS}" || dircolors -p > "${DIRCOLORS}"
+	eval "$(dircolors -b "${DIRCOLORS}")"
 fi
 
 test -x "$(command -v nvim)" && alias e="$(which nvim)"
