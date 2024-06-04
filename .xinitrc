@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 while true; do
-	xsetroot -name "$(date '+%b %d %a %R')"
+	xsetroot -name "$(sh -c "${HOME}/.scripts/dwmbar.sh")"
 	sleep 10s
 done &
 

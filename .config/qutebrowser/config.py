@@ -57,6 +57,9 @@ c.statusbar.padding = my["padding"]
 c.tabs.indicator.padding = my["padding"]
 c.tabs.padding = my["padding"]
 
+c.fonts.default_size = "10pt"
+c.fonts.default_family = [ "Terminus" ]
+
 c.tabs.indicator.width = 1
 
 c.window.hide_decoration = True
