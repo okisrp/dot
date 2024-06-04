@@ -1,2 +1,7 @@
 .config/qutebrowser/*
 !.config/qutebrowser/config.py
+
+.config/doom/*.el
+!.config/doom/init.el
+!.config/doom/packages.el
+!.config/doom/config.el
