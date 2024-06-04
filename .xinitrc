@@ -2,7 +2,7 @@
 
 while true; do
 	xsetroot -name "$(sh -c "${HOME}/.scripts/dwmbar.sh")"
-	sleep 10s
+	sleep 2s
 done &
 
 xrandr --size 1920x1080 &
