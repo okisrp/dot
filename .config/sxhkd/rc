@@ -10,3 +10,8 @@ XF86MonBrightness{Up,Down}
 super + o
 	qutebrowser
 	
+super + n
+	ebook-viewer
+	
+super + i
+	emacs
