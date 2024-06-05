@@ -5,6 +5,9 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 
+export TERMINFO="${XDG_DATA_HOME}/terminfo"
+export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
+
 if [[ -d "${HOME}/.local/bin" ]]; then
   export PATH="${HOME}/.local/bin:$PATH"
 fi

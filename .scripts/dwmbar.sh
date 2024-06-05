@@ -53,7 +53,7 @@ volume() {
 
   icon="󱄡"
   if [[ $mute = "Mute: yes" ]]; then
-   icon="󰸈"
+    icon="󰸈"
   fi
 
   printf "%s %s%%" "${icon}" "${vol}"
