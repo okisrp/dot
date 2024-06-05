@@ -3,6 +3,8 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
+
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 
 if [[ -d "${HOME}/.local/bin" ]]; then
@@ -35,7 +37,10 @@ bind '"\ek": previous-history'
 bind '"\ej": next-history'
 bind '"\ea": kill-whole-line'
 
-export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up"
+export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 HISTFILE="${XDG_STATE_HOME}/bash/history"
 LESSHISTFILE="${XDG_STATE_HOME}/less/history"
