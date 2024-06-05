@@ -3,19 +3,23 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
+export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
+
 if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin:$PATH"
+  export PATH="${HOME}/.local/bin:$PATH"
 fi
 
 if [[ -x "$(command -v nvim)" ]]; then
-	export EDITOR="$(which nvim)"
-	export MANPAGER=""$(which nvim)" +Man!"
+  export EDITOR="$(which nvim)"
+  export MANPAGER=""$(which nvim)" +Man!"
 fi
 
 if [[ -d "${HOME}/.config/emacs/bin" ]]; then
-	export PATH="${HOME}/.config/emacs/bin:$PATH"
-	export DOOMDIR="${HOME}/.config/doom"
+  export PATH="${HOME}/.config/emacs/bin:$PATH"
+  export DOOMDIR="${HOME}/.config/doom"
 fi
+
+export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up"
 
 [[ ! -t 0 ]] && return
 
@@ -33,17 +37,17 @@ HISTFILE="${XDG_STATE_HOME}/bash/history"
 LESSHISTFILE="${XDG_STATE_HOME}/less/history"
 
 if [[ -r "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
-	source "/usr/share/doc/pkgfile/command-not-found.bash"
+  source "/usr/share/doc/pkgfile/command-not-found.bash"
 fi
 
 if [[ -r "/usr/share/bash_completion/bash_completion" ]]; then
-	source "/usr/share/bash_completion/bash_completion"
+  source "/usr/share/bash_completion/bash_completion"
 fi
 
 if [[ -x "$(command -v dircolors)" ]]; then
-	DIRCOLORS="${XDG_CONFIG_HOME}/dircolors"
-	test -r "${DIRCOLORS}" || dircolors -p > "${DIRCOLORS}"
-	eval "$(dircolors -b "${DIRCOLORS}")"
+  DIRCOLORS="${XDG_CONFIG_HOME}/dircolors"
+  test -r "${DIRCOLORS}" || dircolors -p > "${DIRCOLORS}"
+  eval "$(dircolors -b "${DIRCOLORS}")"
 fi
 
 test -x "$(command -v nvim)" && alias e="$(which nvim)"
@@ -68,10 +72,10 @@ test -x "$(command -v bat)" && alias cat="$(which bat)"
 test -x "$(command -v wget)" && alias wget="$(which wget) --no-hsts"
 
 if [[ -x "$(command -v lsd)" ]]; then
-	alias l="$(which lsd) --group-directories-first --icon never \
-		--blocks permission,size,date,name -lA --date '+%y/%m/%d'"
+  alias l="$(which lsd) --group-directories-first --icon never \
+    --blocks permission,size,date,name -lA --date '+%y/%m/%d'"
 else
-	alias l="$(which ls) -gGAh --group-directories-first --color=auto"
+  alias l="$(which ls) -gGAh --group-directories-first --color=auto"
 fi
 
 RST="\\[\\033[00m\\]"
@@ -82,7 +86,7 @@ BLU="${RST}\\[\\033[00;34m\\]"
 PUR="${RST}\\[\\033[00;35m\\]"
 
 PGB="\$(git branch 2> /dev/null | sed -e \
-	'/^[^*]/d' -e 's/* \(.*\)/ ${BLU}(${GRN}\1${BLU})/')"
+  '/^[^*]/d' -e 's/* \(.*\)/ ${BLU}(${GRN}\1${BLU})/')"
 
 PS1="${BLU}${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
 PS1="${PS1}${BLU}${PGB}${RED} > ${RST}"
@@ -90,5 +94,5 @@ PS1="${PS1}${BLU}${PGB}${RED} > ${RST}"
 unset RST RED GRN YLW BLU PUR PGB
 
 if [[ -x "$(command -v zoxide)" ]];then
-	eval "$(zoxide init bash)"
+  eval "$(zoxide init bash)"
 fi
