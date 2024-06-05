@@ -24,7 +24,8 @@ vim.opt.guicursor = ""
 vim.opt.mouse = "a"
 
 vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.listchars = { tab = "↳ ", trail = "·", nbsp = "␣" }
+
 
 vim.opt.scroll = 15
 vim.opt.scrolloff = 9
