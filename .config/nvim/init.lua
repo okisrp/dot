@@ -23,6 +23,9 @@ require("lazy").setup("plugin", {
   defaults = {
     lazy = true,
   },
+  install = {
+    colorscheme = { "catppuccin" },
+  },
   ui = {
     border = "single",
     title = " Manage Laziness ",

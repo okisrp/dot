@@ -1,8 +1,6 @@
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
-vim.cmd.colorscheme("habamax")
-
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
@@ -24,8 +22,7 @@ vim.opt.guicursor = ""
 vim.opt.mouse = "a"
 
 vim.opt.list = true
-vim.opt.listchars = { tab = "↳ ", trail = "·", nbsp = "␣" }
-
+vim.opt.listchars = { tab = "> ", trail = "·", nbsp = "+" }
 
 vim.opt.scroll = 15
 vim.opt.scrolloff = 9
