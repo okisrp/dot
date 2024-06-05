@@ -69,15 +69,13 @@ alias ip="$(which ip) -color=auto"
 
 alias cal="$(which cal) -m"
 
-alias pwd="$(which pwd) -P"
-
 test -x "$(command -v bat)" && alias cat="$(which bat)"
 
 test -x "$(command -v wget)" && alias wget="$(which wget) --no-hsts"
 
-if [[ -x "$(command -v lsd)" ]]; then
-  alias l="$(which lsd) --group-directories-first --icon never \
-    --blocks permission,size,date,name -lA --date '+%y/%m/%d'"
+if [[ -x "$(command -v eza)" ]]; then
+  alias l="$(which eza) -lA --group-directories-first \
+    --no-user --git --time-style '+%y/%m/%d'"
 else
   alias l="$(which ls) -gGAh --group-directories-first --color=auto"
 fi
@@ -95,7 +93,7 @@ PGB="\$(git branch 2> /dev/null | sed -e \
 PS1="${BLU}${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
 PS1="${PS1}${BLU}${PGB}${RED} > ${RST}"
 
-unset RST RED GRN YLW BLU PUR PGB
+unset RST RED GRN YLW BLU PUR PGB DIRCOLORS
 
 if [[ -x "$(command -v zoxide)" ]];then
   eval "$(zoxide init bash)"
