@@ -1,7 +1,7 @@
 local status, _ = pcall(require, "lazy")
 
 if not status then
-    return
+  return
 end
 
 vim.keymap.set("n", "<M-S-l>", vim.cmd.Lazy)
