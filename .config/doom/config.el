@@ -61,7 +61,7 @@
 
 (map! :leader "hrF" 'my/font-load)
 
-(my/font-load 0 "Terminus" 18 32)
+(my/font-load 0 "Iosevka Fixed" 16 32)
 
 (let ((font-family "JoyPixels"))
   (when (doom-font-exists-p font-family)
@@ -132,7 +132,7 @@
         org-appear-autoemphasis nil))
 
 (after! org
-  (setq org-superstar-headline-bullets-list '(42)
+  (setq org-superstar-headline-bullets-list '(9679)
         org-superstar-item-bullet-alist '((43 . 187) (45 . 8250))))
 
 (defun my/browse-org-directory (&rest _)
