@@ -22,7 +22,9 @@ if [[ -d "${HOME}/.config/emacs/bin" ]]; then
   export DOOMDIR="${HOME}/.config/doom"
 fi
 
-export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up"
+export NVM_DIR="${XDG_CONFIG_HOME}/nvm"
+[[ -s "${NVM_DIR}/nvm.sh" ]] && source "${NVM_DIR}/nvm.sh"
+[[ -s "${NVM_DIR}/bash_completion" ]] && source "${NVM_DIR}/bash_completion"
 
 [[ ! -t 0 ]] && return
 
@@ -35,6 +37,8 @@ bind "set completion-ignore-case on"
 bind '"\ek": previous-history'
 bind '"\ej": next-history'
 bind '"\ea": kill-whole-line'
+
+export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up"
 
 HISTFILE="${XDG_STATE_HOME}/bash/history"
 LESSHISTFILE="${XDG_STATE_HOME}/less/history"
