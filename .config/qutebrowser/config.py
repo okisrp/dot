@@ -91,3 +91,8 @@ config.bind("<Alt-J>", "completion-item-focus --history next", mode="command")
 
 config.bind("<Alt-K>", "prompt-item-focus prev", mode="prompt")
 config.bind("<Alt-J>", "prompt-item-focus next", mode="prompt")
+
+config.unbind("j"); config.unbind("k")
+
+config.bind("k", "scroll-px 0 -30")
+config.bind("j", "scroll-px 0 +30")
