@@ -1,4 +1,6 @@
 .config/qutebrowser/*
+.config/qutebrowser/**/__pycache__
+!.config/qutebrowser/themes
 !.config/qutebrowser/config.py
 
 .config/doom/*.el

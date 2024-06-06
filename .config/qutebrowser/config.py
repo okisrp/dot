@@ -1,4 +1,8 @@
+from themes import default
+
 config.load_autoconfig(False)
+
+default.setup(c)
 
 c.colors.webpage.preferred_color_scheme = "dark"
 
@@ -69,7 +73,8 @@ c.downloads.remove_finished = 2000
 
 config.bind("al", "download-clear")
 
-config.bind(",y", "open -t -- {clipboard}")
+config.bind("yl", "hint links yank")
+config.bind("yo", "open -t -- {clipboard}")
 
 config.bind(",mpv", "hint links spawn --detach mpv {hint-url}")
 
@@ -86,13 +91,3 @@ config.bind("<Alt-J>", "completion-item-focus --history next", mode="command")
 
 config.bind("<Alt-K>", "prompt-item-focus prev", mode="prompt")
 config.bind("<Alt-J>", "prompt-item-focus next", mode="prompt")
-
-config.bind("<Alt-C>", "mode-leave", mode="command")
-
-config.bind("<Alt-C>", "mode-leave", mode="insert")
-config.bind("<Alt-C>", "clear-keychain ;; search ;; fullscreen --leave")
-config.bind("<Alt-C>", "mode-leave", mode="caret")
-config.bind("<Alt-C>", "mode-leave", mode="prompt")
-config.bind("<Alt-C>", "mode-leave", mode="register")
-config.bind("<Alt-C>", "mode-leave", mode="yesno")
-config.bind("<Alt-C>", "mode-leave", mode="hint")
