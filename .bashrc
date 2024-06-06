@@ -29,7 +29,15 @@ export NVM_DIR="${XDG_CONFIG_HOME}/nvm"
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
 
+LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+
+shopt -s histappend
+
+HISTFILE="${XDG_STATE_HOME}/bash/history"
+HISTSIZE=2000
+
 shopt -s autocd
+shopt -s cdspell
 
 bind "set completion-ignore-case on"
 
@@ -41,9 +49,6 @@ export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
   --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
   --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
   --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
-
-HISTFILE="${XDG_STATE_HOME}/bash/history"
-LESSHISTFILE="${XDG_STATE_HOME}/less/history"
 
 if [[ -r "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
   source "/usr/share/doc/pkgfile/command-not-found.bash"
