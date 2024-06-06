@@ -43,7 +43,7 @@ layout() {
   label="us"
   [[ "${key}" = "00001000" ]] && label="ua"
 
-  printf "${prp}%s %s" "" "${label}"
+  printf "${prp}%s %s" "󰌑" "${label}"
 }
 
 volume() {
