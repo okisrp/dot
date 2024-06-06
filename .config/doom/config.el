@@ -45,6 +45,10 @@
 
 (setq doom-theme 'doom-one)
 
+(after! evil-goggles
+  (custom-set-faces!
+    '(evil-goggles-yank-face :inherit isearch)))
+
 (add-hook! '(prog-mode-hook conf-mode-hook)
   (face-remap-add-relative 'font-lock-comment-face :slant 'italic))
 
