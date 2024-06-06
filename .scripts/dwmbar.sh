@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+red="^c#d20f39^"
+ylw="^c#df8e1d^"
+grn="^c#40a02b^"
+blu="^c#1e66f5^"
+rst="^c#cdd6f4^"
+
 battery() {
   cap="$(cat /sys/class/power_supply/BAT0/capacity)"
   stat="$(cat /sys/class/power_supply/BAT0/status)"
@@ -7,14 +13,30 @@ battery() {
   icon="󰂃"
   [[ "${stat}" = "Charging" ]] && icon="󰂄"
 
-  printf "%s %s%%" "${icon}" "${cap}"
+  if [[ $cap -ge 60 ]]; then
+    clr="${grn}"
+  elif [[ $cap -lt 60 ]] && [[ $cap -ge 30  ]]; then
+    clr="${ylw}"
+  else
+    clr="${red}"
+  fi
+
+  printf "%s%s %s%s%%" "${clr}" "${icon}" "${rst}" "${cap}"
 }
 
 brightness() {
   brt="$(calc "100 * $(brightnessctl get) / $(brightnessctl max)")"
   brt="$(printf "%.*f" 0 "${brt:2:-1}")"
 
-  printf "%s %s%%" "󱠂" "${brt}"
+  if [[ $brt -ge 50 ]]; then
+    clr="${blu}"
+  elif [[ $brt -lt 50 ]] && [[ $brt -ge 20  ]]; then
+    clr="${ylw}"
+  else
+    clr="${red}"
+  fi
+
+  printf "%s%s %s%s%%" "${clr}" "󱠂" "${rst}" "${brt}"
 }
 
 datetime() {
@@ -27,10 +49,10 @@ datetime() {
 wlan() {
   case "$(cat /sys/class/net/wl*/operstate 2> /dev/null)" in
     up)
-      stat="󱚽 Up"
+      stat="${blu}󱚽 ${rst}Up"
       ;;
     down)
-      stat="󱚼 Dn"
+      stat="${red}󱚼 ${rst}Dn"
       ;;
   esac
 
@@ -40,10 +62,10 @@ wlan() {
 layout() {
   key="$(xset -q | grep "LED" | awk "{ print \$10 }")"
 
-  label="us"
-  [[ "${key}" = "00001000" ]] && label="ua"
+  label="us" && clr="${blu}"
+  [[ "${key}" = "00001000" ]] && label="ua" && clr="${red}"
 
-  printf "${prp}%s %s" "󰌑" "${label}"
+  printf "%s%s %s%s" "${clr}" "󰌑" "${rst}"  "${label}"
 }
 
 volume() {
@@ -51,12 +73,14 @@ volume() {
   vol="$(pactl get-sink-volume @DEFAULT_SINK@ \
     | grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')"
 
-  icon="󱄡"
+  icon="󱄡"; clr="${grn}"
   if [[ $mute = "Mute: yes" ]]; then
-    icon="󰸈"
+    icon="󰸈"; clr="${red}"
+  elif [[ $vol = "0" ]]; then
+   clr="${ylw}"
   fi
 
-  printf "%s %s%%" "${icon}" "${vol}"
+  printf "%s%s %s%s%%" "${clr}" "${icon}" "${rst}" "${vol}"
 }
 
 printf "%s" " $(layout) 󰿟 $(volume) 󰿟 $(brightness) 󰿟 $(battery) 󰿟 $(wlan) 󰿟 $(datetime) "
