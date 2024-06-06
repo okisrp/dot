@@ -34,34 +34,10 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-(defvar my/font-family "Iosevka"
-  "Default font family for `my/font-load' function.")
-
-(defvar my/font-size 18
-  "Default font size for `my/font-load' function.")
-
-(defun my/font-load
-    (&optional _ family size big-size &rest _)
-  "Configure font family and its size both explicitly or interactively."
-  (interactive
-   (list current-prefix-arg
-         (read-string "Font family: " my/font-family)
-         (read-number "Font size: " my/font-size)))
-  (let* ((family (cond (family) (my/font-family)))
-         (size (cond (size) (my/font-size)))
-         (big-size (cond (big-size) (t (+ 6 size)))))
-    (if (doom-font-exists-p family)
-        (progn
-          (setq doom-font (font-spec :family family :size size)
-                doom-big-font (font-spec :family family :size big-size))
-          (when (called-interactively-p 'any)
-            (doom/reload-font)))
-      (message "%s" (propertize (format "%s doesn't exists!" family)
-                                'face 'warning)))))
-
-(map! :leader "hrF" 'my/font-load)
-
-(my/font-load 0 "Iosevka Fixed" 16 32)
+(let ((font-size 18)
+      (font-family "Iosevka Fixed"))
+  (setq doom-font (font-spec :family font-family :size font-size)
+        doom-big-font (font-spec :family font-family :size (+ 10 font-size))))
 
 (let ((font-family "JoyPixels"))
   (when (doom-font-exists-p font-family)
