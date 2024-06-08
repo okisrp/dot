@@ -85,7 +85,7 @@ test -x "$(command -v wget)" && alias wget="$(which wget) --no-hsts"
 
 if [[ -x "$(command -v eza)" ]]; then
   alias l="$(which eza) -lA --group-directories-first \
-    --no-user --git --time-style '+%y/%m/%d'"
+    --no-user --git --time-style \"+%y/%m/%d\""
 else
   alias l="$(which ls) -gGAh --group-directories-first --color=auto"
 fi
