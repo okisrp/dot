@@ -5,7 +5,7 @@ LONG_OPTS="up,down,mute,level:,set:"
 
 OPTS="$(getopt --options "${SHORT_OPTS}" \
   --longoptions "${LONG_OPTS}" --alternative \
-  --name "manage-volume" -- "${@}")"
+  --name "Manage Volume" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
   echo "Failed parsing options." >&2
@@ -41,16 +41,18 @@ done
 
 CMD="$(which pactl)"
 
+UNMUTE() {
+  sh -c "${CMD} set-sink-mute 0 0"
+}
+
 if (( "${SET}" != 0 )); then
-  sh -c "${CMD} set-sink-volume 0 ${SET}%"
+  sh -c "${CMD} set-sink-volume 0 ${SET}%" && UNMUTE
 elif [[ "${MUTE}" = true ]]; then
-  sh -c "${CMD} set-sink-mute 0 toggle" && exit
+  sh -c "${CMD} set-sink-mute 0 toggle"
 elif [[ "${DOWN}" = true ]]; then
-  sh -c "${CMD} set-sink-volume 0 -${LEVEL}%"
+  sh -c "${CMD} set-sink-volume 0 -${LEVEL}%" && UNMUTE
 else
-  sh -c "${CMD} set-sink-volume 0 +${LEVEL}%"
+  sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
 fi
 
-sh -c "${CMD} set-sink-mute 0 0"
-
-sh -c "~/.scripts/dwmrefbar.sh"
+sh -c "~/.scripts/dwm/status.sh -r"

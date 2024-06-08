@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 while true; do
-  xsetroot -name "$(sh -c "${HOME}/.scripts/dwmbar.sh")"
+  xsetroot -name "$(sh -c "${HOME}/.scripts/dwm/status.sh -p")"
   sleep 10s
 done &
 

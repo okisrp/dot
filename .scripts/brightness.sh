@@ -5,7 +5,7 @@ LONG_OPTS="up,down,level:,set:"
 
 OPTS="$(getopt --options "${SHORT_OPTS}" \
   --longoptions "${LONG_OPTS}" --alternative \
-  --name "adjust-brightness" -- "${@}")"
+  --name "Adjust Brightness" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
   echo "Failed parsing options." >&2
@@ -46,4 +46,4 @@ else
   sh -c "${CMD} set +${LEVEL}%"
 fi
 
-sh -c "~/.scripts/dwmrefbar.sh"
+sh -c "~/.scripts/dwm/status.sh -r"
