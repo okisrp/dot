@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 OPTS="$(getopt --options "f:u:" --longoptions "format:,url:" \
-  --alternative --name "ytdl.sh" -- "${@}")"
+  --alternative --name "YT CLI Downloader" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
   echo "Failed parsing options." >&2
