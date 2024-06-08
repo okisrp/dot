@@ -45,3 +45,5 @@ elif [[ "${DOWN}" = true ]]; then
 else
   sh -c "${CMD} set +${LEVEL}%"
 fi
+
+sh -c "~/.scripts/dwmrefbar.sh"

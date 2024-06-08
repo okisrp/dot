@@ -52,3 +52,5 @@ else
 fi
 
 sh -c "${CMD} set-sink-mute 0 0"
+
+sh -c "~/.scripts/dwmrefbar.sh"
