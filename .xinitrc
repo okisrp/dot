@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
 while true; do
-  xsetroot -name "$(sh -c "${HOME}/.scripts/dwm/status.sh -p")"
-  sleep 10s
+	xsetroot -name "$(sh -c "${HOME}/.scripts/dwm/status.sh -p")"
+	sleep 10s
 done &
 
 xrandr --size 1920x1080 &
@@ -20,7 +20,7 @@ sxhkd -c "${HOME}/.config/sxhkd/rc" &
 setxkbmap -layout us,ua -option grp:shifts_toggle &
 
 if [[ -e "${HOME}/.local/share/wallpapers/default" ]];then
-  feh --no-fehbg --bg-scale "${HOME}/.local/share/wallpapers/default" &
+	feh --no-fehbg --bg-scale "${HOME}/.local/share/wallpapers/default" &
 fi
 
 exec dwm

@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-# vim:sw=4:ts=4:noet
 
 OPTS="$(getopt --options "pr" --longoptions "print,refresh" \
 	--alternative --name "DWM Status Bar" -- "${@}")"
