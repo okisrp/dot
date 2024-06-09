@@ -42,11 +42,11 @@ vim.opt.breakindent = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 vim.opt.smarttab = true
 
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 
-vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
