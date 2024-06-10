@@ -1,11 +1,8 @@
 #!/usr/bin/env sh
 
-SHORT_OPTS="udl:s:"
-LONG_OPTS="up,down,level:,set:"
-
-OPTS="$(getopt --options "${SHORT_OPTS}" \
-	--longoptions "${LONG_OPTS}" --alternative \
-	--name "Adjust Brightness" -- "${@}")"
+OPTS="$(getopt --options "udl:s:" \
+	--longoptions "up,down,level:,set:" \
+	--alternative --name "Adjust Brightness" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
 	echo "Failed parsing options." >&2
@@ -22,15 +19,15 @@ SET=0
 while true; do
 	case "${1}" in
 		"-u" | "--up" )
-			UP=true && DOWN=false; shift ;;
+			UP=true && DOWN=false ; shift ;;
 		"-d" | "--down" )
-			DOWN=true && UP=false; shift ;;
+			DOWN=true && UP=false ; shift ;;
 		"-l" | "--level" )
-			LEVEL="${2}"; shift 2 ;;
+			LEVEL="${2}" ; shift 2 ;;
 		"-s" | "--set" )
-			SET="${2}"; shift 2 ;;
+			SET="${2}" ; shift 2 ;;
 		"--" )
-			shift; break ;;
+			shift ; break ;;
 		* )
 			break ;;
 	esac

@@ -1,11 +1,8 @@
 #!/usr/bin/env sh
 
-SHORT_OPTS="udml:s:"
-LONG_OPTS="up,down,mute,level:,set:"
-
-OPTS="$(getopt --options "${SHORT_OPTS}" \
-	--longoptions "${LONG_OPTS}" --alternative \
-	--name "Manage Volume" -- "${@}")"
+OPTS="$(getopt --options "udml:s:" \
+	--longoptions "up,down,mute,level:,set:" \
+	--alternative --name "Manage Volume" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
 	echo "Failed parsing options." >&2
@@ -23,17 +20,17 @@ SET=0
 while true; do
 	case "${1}" in
 		"-u" | "--up" )
-			UP=true && DOWN=false; shift ;;
+			UP=true && DOWN=false ; shift ;;
 		"-d" | "--down" )
-			DOWN=true && UP=false; shift ;;
+			DOWN=true && UP=false ; shift ;;
 		"-m" | "--mute" )
-			MUTE=true; shift ;;
+			MUTE=true ; shift ;;
 		"-l" | "--level" )
-			LEVEL="${2}"; shift 2 ;;
+			LEVEL="${2}" ; shift 2 ;;
 		"-s" | "--set" )
-			SET="${2}"; shift 2 ;;
+			SET="${2}" ; shift 2 ;;
 		"--" )
-			shift; break ;;
+			shift ; break ;;
 		* )
 			break ;;
 	esac
