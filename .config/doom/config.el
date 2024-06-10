@@ -222,6 +222,8 @@
        :n "j" 'dired-jump
        :n "o" 'dired-jump-other-window))
 
+(map! :n (char-to-string ?-) 'dired-jump)
+
 (map! :map dired-mode-map
       :n "h" 'dired-up-directory
       :n "l" 'dired-find-alternate-file)
