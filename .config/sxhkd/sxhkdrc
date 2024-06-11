@@ -7,6 +7,9 @@ XF86Audio{Raise,Lower}Volume
 XF86MonBrightness{Up,Down}
 	~/.scripts/brightness.sh {-up, -down}
 
+XF86AudioPlay
+	playerctl play-pause
+
 Print
 	scrot -p
 
