@@ -15,8 +15,8 @@
 # by Oleksii Kapula
 #
 
-OPTS="$(getopt --options "ix" \
-	--longoptions "install,xorg" \
+OPTS="$(getopt --options "ixs:" \
+	--longoptions "install,xorg,sltools:" \
 	--alternative --name "Manage Volume" -- "${@}")"
 
 if [[ "${?}" != 0 ]]; then
@@ -28,6 +28,7 @@ eval set -- "${OPTS}"
 
 INSTALL=false
 XORG=false
+SLTOOLS=""
 
 while true; do
 	case "${1}" in
@@ -35,6 +36,8 @@ while true; do
 			INSTALL=true ; shift ;;
 		"-x" | "--xorg" )
 			XORG=true ; shift ;;
+		"-s" | "--sltools" )
+			SLTOOLS="${2}" ; shift 2 ;;
 		"--" )
 			shift ; break ;;
 		* )
@@ -96,3 +99,18 @@ if [[ ! -x "$( command -v yay )" ]]; then
 fi
 
 yay -S --needed "${DEPS[@]}"
+
+[[ -z "${SLTOOLS}" ]] && exit
+
+SLTOOLSDIR="${HOME}/.suckless"
+
+[[ -d "${SLTOOLSDIR}" ]] || mkdir -p "${SLTOOLSDIR}"
+
+IFS=","
+read -ra TOOLS <<< "${SLTOOLS}"
+SLTOOLS=( "${TOOLS[@]}" )
+unset TOOLS
+
+for TOOL in "${SLTOOLS[@]}"; do
+	git clone --depth 1 "https://git.suckless.org/${TOOL}" "${SLTOOLSDIR}/${TOOL}"
+done
