@@ -16,9 +16,6 @@ super + Print
 super + shift + Print
 	scrot -bps
 
-super + u
-	kitty
-
 super + o
 	qutebrowser
 
