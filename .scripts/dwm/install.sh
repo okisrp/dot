@@ -15,9 +15,9 @@
 # by Oleksii Kapula
 #
 
-OPTS="$(getopt --options "ixs:" \
+OPTS="$( getopt --options "ixs:" \
 	--longoptions "install,xorg,sltools:" \
-	--alternative --name "Manage Volume" -- "${@}")"
+	--alternative --name "Manage Volume" -- "${@}" )"
 
 if [[ "${?}" != 0 ]]; then
 	echo "Failed parsing options." >&2
@@ -93,7 +93,7 @@ fi
 
 if [[ ! -x "$( command -v yay )" ]]; then
 	sudo pacman -S --needed base-devel git
-	git clone https://aur.archlinux.org/yay-bin.git
+	git clone --depth 1 https://aur.archlinux.org/yay-bin.git
 	cd yay-bin/ && makepkg -si
 	cd - && rm yay-bin/ -rf
 fi
@@ -102,7 +102,7 @@ yay -S --needed "${DEPS[@]}"
 
 [[ -z "${SLTOOLS}" ]] && exit
 
-SLTOOLSDIR="${HOME}/.suckless"
+SLTOOLSDIR="${HOME}/.local/state/sltools"
 
 [[ -d "${SLTOOLSDIR}" ]] || mkdir -p "${SLTOOLSDIR}"
 
