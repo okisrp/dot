@@ -23,7 +23,7 @@ super + shift + Print
 	scrot -bps
 
 super + o
-	qutebrowser
+	brave
 
 super + n
 	ebook-viewer
