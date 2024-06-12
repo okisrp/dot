@@ -66,10 +66,10 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-(let ((font-size 18)
+(let ((font-size 21)
       (font-family "Iosevka Fixed"))
   (setq doom-font (font-spec :family font-family :size font-size)
-        doom-big-font (font-spec :family font-family :size (+ 10 font-size))))
+        doom-big-font (font-spec :family font-family :size (+ 9 font-size))))
 
 (let ((font-family "JoyPixels"))
   (when (doom-font-exists-p font-family)
@@ -266,6 +266,10 @@
 
 (customize-set-variable
  'default-input-method "ukrainian-computer")
+
+(map! :map help-mode-map
+      :n "M-k" 'help-go-back
+      :n "M-j" 'help-go-forward)
 
 (use-package! google-translate
   :init
