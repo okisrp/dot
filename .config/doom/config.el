@@ -75,14 +75,20 @@
   (when (doom-font-exists-p font-family)
     (setq doom-emoji-font (font-spec :family font-family))))
 
-(setq doom-theme 'doom-one)
+(use-package! catppuccin-theme
+  :custom
+  (catppuccin-flavor 'mocha)
+  (catppuccin-italic-comments t)
+  :config
+  (load-theme 'catppuccin :no-confirm))
+
+(after! (:and catppuccin-theme org)
+  (custom-set-faces!
+    `(org-todo :foreground ,(catppuccin-get-color 'green))))
 
 (after! evil-goggles
   (custom-set-faces!
     '(evil-goggles-yank-face :inherit isearch)))
-
-(add-hook! '(prog-mode-hook conf-mode-hook)
-  (face-remap-add-relative 'font-lock-comment-face :slant 'italic))
 
 (defun my/doom-dashboard-widget-quote ()
   (when doom-init-time
