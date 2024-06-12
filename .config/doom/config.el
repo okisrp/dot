@@ -66,7 +66,7 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-(let ((font-size 21)
+(let ((font-size 19)
       (font-family "Iosevka Fixed"))
   (setq doom-font (font-spec :family font-family :size font-size)
         doom-big-font (font-spec :family font-family :size (+ 9 font-size))))
@@ -75,16 +75,7 @@
   (when (doom-font-exists-p font-family)
     (setq doom-emoji-font (font-spec :family font-family))))
 
-(use-package! catppuccin-theme
-  :custom
-  (catppuccin-flavor 'mocha)
-  (catppuccin-italic-comments t)
-  :config
-  (load-theme 'catppuccin :no-confirm))
-
-(after! (:and catppuccin-theme org)
-  (custom-set-faces!
-    `(org-todo :foreground ,(catppuccin-get-color 'green))))
+(setq doom-theme 'doom-one)
 
 (after! evil-goggles
   (custom-set-faces!
