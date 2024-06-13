@@ -13,7 +13,7 @@ fi
 
 if [[ -x "$(command -v nvim)" ]]; then
 	export EDITOR="$(which nvim)"
-	export MANPAGER=""$(which nvim)" +Man!"
+	export MANPAGER="${EDITOR} +Man!"
 fi
 
 if [[ -d "${HOME}/.config/emacs/bin" ]]; then
@@ -21,9 +21,16 @@ if [[ -d "${HOME}/.config/emacs/bin" ]]; then
 	export DOOMDIR="${HOME}/.config/doom"
 fi
 
-export NVM_DIR="${XDG_CONFIG_HOME}/nvm"
-[[ -s "${NVM_DIR}/nvm.sh" ]] && source "${NVM_DIR}/nvm.sh"
-[[ -s "${NVM_DIR}/bash_completion" ]] && source "${NVM_DIR}/bash_completion"
+export NVM_DIR="${XDG_STATE_HOME}/nvm"
+
+test -d "${NVM_DIR}" || mkdir "${NVM_DIR}"
+
+if [[ -s "${NVM_DIR}/nvm.sh" ]] && [[ -s "${NVM_DIR}/bash_completion" ]]; then
+	source "${NVM_DIR}/nvm.sh"
+	source "${NVM_DIR}/bash_completion"
+else
+	PROFILE=/dev/null bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+fi
 
 [[ ! -t 0 ]] && return
 
