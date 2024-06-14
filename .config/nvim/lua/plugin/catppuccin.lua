@@ -16,8 +16,10 @@ return {
 				enabled = true,
 				percentage = 0.8,
 			},
+			no_italic = true,
 			styles = {
 				conditionals = {},
+				comments = {},
 			},
 			integrations = {
 				vim_sneak = true,
