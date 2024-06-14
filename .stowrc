@@ -1,2 +1,2 @@
---dir=~/.dotfiles
+--dir=~/.local/share/dotfiles
 --target=~/

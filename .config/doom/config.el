@@ -119,7 +119,8 @@
               standard-indent 2
               indent-tabs-mode nil)
 
-(setq org-directory (expand-file-name ".orgnotes/" (getenv "HOME")))
+(setq org-directory
+      (expand-file-name ".local/share/orgnotes/" (getenv "HOME")))
 
 (after! org
   (setq org-ellipsis "…"
