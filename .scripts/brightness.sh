@@ -43,4 +43,4 @@ else
 	sh -c "${CMD} set +${LEVEL}%"
 fi
 
-sh -c "~/.local/share/dotfiles/.scripts/dwm/status.sh -r"
+sh -c "~/.scripts/dwm/status.sh -r"

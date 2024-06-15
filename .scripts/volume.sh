@@ -52,4 +52,4 @@ else
 	sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
 fi
 
-sh -c "~/.local/share/dotfiles/.scripts/dwm/status.sh -r"
+sh -c "~/.scripts/dwm/status.sh -r"

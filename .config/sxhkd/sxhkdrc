@@ -1,11 +1,11 @@
 XF86AudioMute
-	~/.local/share/dotfiles/.scripts/volume.sh -mute
+	~/.scripts/volume.sh -mute
 
 XF86Audio{Raise,Lower}Volume
-	~/.local/share/dotfiles/.scripts/volume.sh {-up, -down}
+	~/.scripts/volume.sh {-up, -down}
 
 XF86MonBrightness{Up,Down}
-	~/.local/share/dotfiles/.scripts/brightness.sh {-up, -down}
+	~/.scripts/brightness.sh {-up, -down}
 
 XF86AudioPlay
 	playerctl play-pause
@@ -21,6 +21,9 @@ super + Print
 
 super + shift + Print
 	scrot -bps
+
+super + u
+	kitty
 
 super + o
 	brave
