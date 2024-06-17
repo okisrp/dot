@@ -1,6 +1,5 @@
 return {
 	"stevearc/oil.nvim",
-	lazy = false,
 	opts = {
 		columns = {},
 		view_options = {
