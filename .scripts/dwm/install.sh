@@ -100,17 +100,24 @@ fi
 
 yay -S --needed "${DEPS[@]}"
 
-[[ -z "${SLTOOLS}" ]] && exit
+SLTOOLSFN() {
+	SLTOOLSDIR="${HOME}/.local/state/sltools"
 
-SLTOOLSDIR="${HOME}/.local/state/sltools"
+	[[ -d "${SLTOOLSDIR}" ]] || mkdir -p "${SLTOOLSDIR}"
 
-[[ -d "${SLTOOLSDIR}" ]] || mkdir -p "${SLTOOLSDIR}"
+	local IFS=","
+	read -ra TOOLS <<< "${SLTOOLS}"
+	SLTOOLS=( "${TOOLS[@]}" )
+	unset TOOLS
 
-IFS=","
-read -ra TOOLS <<< "${SLTOOLS}"
-SLTOOLS=( "${TOOLS[@]}" )
-unset TOOLS
+	for TOOL in "${SLTOOLS[@]}"; do
+		local TOOLDIR="${SLTOOLSDIR}/${TOOL}"
+		[[ -d "${TOOLDIR}" ]] && continue
+		git clone --depth 1 "https://git.suckless.org/${TOOL}" "${TOOLDIR}"
+		cd "${TOOLDIR}"
+		rm .git/ -rf
+		cd -
+	done
+}
 
-for TOOL in "${SLTOOLS[@]}"; do
-	git clone --depth 1 "https://git.suckless.org/${TOOL}" "${SLTOOLSDIR}/${TOOL}"
-done
+[[ -z "${SLTOOLS}" ]] || SLTOOLSFN
