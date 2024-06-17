@@ -4,7 +4,6 @@ export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
-
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 
 if [[ -d "${HOME}/.local/bin" ]]; then
@@ -57,18 +56,19 @@ export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
-if [[ -r "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
-	source "/usr/share/doc/pkgfile/command-not-found.bash"
-fi
+PKGFILE="/usr/share/doc/pkgfile/command-not-found.bash"
+[[ -r "${PKGFILE}" ]] && source "${PKGFILE}"
 
-if [[ -r "/usr/share/bash_completion/bash_completion" ]]; then
-	source "/usr/share/bash_completion/bash_completion"
-fi
+COMPFILE="/usr/share/bash_completion/bash_completion"
+[[ -r "${COMPFILE}" ]] && source "${COMPFILE}"
+
+unset PKGFILE COMPFILE
 
 if [[ -x "$(command -v dircolors)" ]]; then
 	DIRCOLORS="${XDG_CONFIG_HOME}/dircolors"
 	test -r "${DIRCOLORS}" || dircolors -p > "${DIRCOLORS}"
 	eval "$(dircolors -b "${DIRCOLORS}")"
+	unset DIRCOLORS
 fi
 
 test -x "$(command -v nvim)" && alias e="$(which nvim)"
@@ -110,7 +110,7 @@ PGB="\$(git branch 2> /dev/null | sed -e \
 PS1="${BLU}${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
 PS1="${PS1}${BLU}${PGB}${RED} > ${RST}"
 
-unset RST RED GRN YLW BLU PUR PGB DIRCOLORS
+unset RST RED GRN YLW BLU PUR PGB
 
 if [[ -x "$(command -v zoxide)" ]];then
 	eval "$(zoxide init bash)"
