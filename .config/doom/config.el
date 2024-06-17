@@ -80,7 +80,8 @@
 
 (after! evil-goggles
   (custom-set-faces!
-    '(evil-goggles-yank-face :inherit isearch)))
+    '(evil-goggles-yank-face :inherit isearch)
+    `(evil-goggles-paste-face :background ,(doom-color 'success))))
 
 (defun my/doom-dashboard-widget-quote ()
   (when doom-init-time
