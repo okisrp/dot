@@ -1,49 +1,62 @@
 #!/usr/bin/env bash
 
-#
-#  ________  ___       __   _____ ______
-# |\   ___ \|\  \     |\  \|\   _ \  _   \
-# \ \  \_|\ \ \  \    \ \  \ \  \\\__\ \  \
-#  \ \  \ \\ \ \  \  __\ \  \ \  \\|__| \  \
-#   \ \  \_\\ \ \  \|\__\_\  \ \  \    \ \  \
-#    \ \_______\ \____________\ \__\    \ \__\
-#     \|_______|\|____________|\|__|     \|__|
-#
+SHORTOPTS="hixt:"
+LONGOPTS="help,install,xorg,sltools:"
 
-#
-# DWM Installation Script
-# by Oleksii Kapula
-#
-
-OPTS="$( getopt --options "ixs:" \
-	--longoptions "install,xorg,sltools:" \
-	--alternative --name "Manage Volume" -- "${@}" )"
+OPTS="$( getopt -ao "${SHORTOPTS}" -l "${LONGOPTS}" -- "${@}" )"
 
 if [[ "${?}" != 0 ]]; then
-	echo "Failed parsing options." >&2
+	echo "Failed parsing options!" >&2
 	exit 1
 fi
 
 eval set -- "${OPTS}"
+unset SHORTOPTS LONGOPTS OPTS
+
+HELP() {
+	echo "See source code for help."
+}
 
 INSTALL=false
 XORG=false
-SLTOOLS=""
+
+SLTOOLSFN() {
+	local IFS=","
+	read -ra SLTOOLS <<< "${1}"
+}
 
 while true; do
 	case "${1}" in
+		"-h" | "--help" )
+			HELP
+			shift ; exit 0 ;;
 		"-i" | "--install" )
-			INSTALL=true ; shift ;;
+			INSTALL=true
+			shift ; continue ;;
 		"-x" | "--xorg" )
-			XORG=true ; shift ;;
-		"-s" | "--sltools" )
-			SLTOOLS="${2}" ; shift 2 ;;
+			XORG=true
+			shift ; continue ;;
+		"-t" | "--sltools" )
+			SLTOOLSFN "${2}"
+			shift 2 ; continue ;;
 		"--" )
 			shift ; break ;;
 		* )
-			break ;;
+			echo "Internal error." >&2
+			exit 1 ;;
 	esac
 done
+
+if [[ "${INSTALL}" = true ]]; then
+	CONFIRM="YES"
+	printf "Type \033[0;32m%s\033[0m to proceed: " "${CONFIRM}"
+	read -r PROCEED
+	[[ "${PROCEED}" = "${CONFIRM}" ]] || exit 1
+	unset CONFIRM PROCEED
+else
+	echo "In order to run the script pass -i option."
+	exit 1
+fi
 
 DEPS=(
 	"base-devel"
@@ -64,61 +77,51 @@ DEPS=(
 	"playerctl"
 	"calc"
 	"terminus-font"
+	"xclip"
 )
 
-XDEPS=(
-	"server"
-	"xinit"
-	"xprop"
-	"xsetroot"
-	"xset"
-	"xinput"
-	"setxkbmap"
-	"xev"
-)
+XORGFN() {
+	local XDEPS=(
+		"server"
+		"xinit"
+		"xprop"
+		"xsetroot"
+		"xset"
+		"xinput"
+		"setxkbmap"
+		"xev"
+	)
 
-if [[ "${INSTALL}" = true ]]; then
-	read -p "Type \`yes' in upper case to proceed: " PROCEED
-	[[ ! "${PROCEED}" = "YES" ]] && exit
-else
-	exit
-fi
-
-if [[ "${XORG}" = true ]]; then
-	DEPS+=( "xorg" )
-else
-	for DEP in "${XDEPS[@]}"; do
-		DEPS+=( "xorg-${DEP}" )
-	done
-fi
+	if [[ "${XORG}" = true ]]; then
+		DEPS+=( "xorg" "xorg-xev" )
+	else
+		for DEP in "${XDEPS[@]}"; do
+			DEPS+=( "xorg-${DEP}" )
+		done
+	fi
+}
 
 if [[ ! -x "$( command -v yay )" ]]; then
 	sudo pacman -S --needed base-devel git
-	git clone --depth 1 https://aur.archlinux.org/yay-bin.git
+	git clone --depth 1 "https://aur.archlinux.org/yay-bin.git"
 	cd yay-bin/ && makepkg -si
 	cd - && rm yay-bin/ -rf
 fi
 
-yay -S --needed "${DEPS[@]}"
+XORGFN && yay -S --needed "${DEPS[@]}"
 
-SLTOOLSFN() {
+if [[ -n "${SLTOOLS[*]}" ]]; then
 	SLTOOLSDIR="${HOME}/.local/state/sltools"
-
 	[[ -d "${SLTOOLSDIR}" ]] || mkdir -p "${SLTOOLSDIR}"
 
-	local IFS=","
-	read -ra TOOLS <<< "${SLTOOLS}"
-	SLTOOLS=( "${TOOLS[@]}" )
-	unset TOOLS
-
 	for TOOL in "${SLTOOLS[@]}"; do
-		local TOOLDIR="${SLTOOLSDIR}/${TOOL}"
+		TOOLDIR="${SLTOOLSDIR}/${TOOL}"
 		[[ -d "${TOOLDIR}" ]] && continue
 		git clone --depth 1 "https://git.suckless.org/${TOOL}" "${TOOLDIR}"
-		cd "${TOOLDIR}"
-		rm .git/ -rf
-		cd -
+		cd "${TOOLDIR}" && rm .git/ -rf ; cd -
 	done
-}
+	unset TOOLDIR
+fi
 
-[[ -z "${SLTOOLS}" ]] || SLTOOLSFN
+echo "All done successfully."
+exit 0
