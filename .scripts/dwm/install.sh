@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 #
 #  ________  ___       __   _____ ______
@@ -63,6 +63,7 @@ DEPS=(
 	"alsa-utils"
 	"playerctl"
 	"calc"
+	"terminus-font"
 )
 
 XDEPS=(

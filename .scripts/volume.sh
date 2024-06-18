@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 OPTS="$(getopt --options "udml:s:" \
 	--longoptions "up,down,mute,level:,set:" \
@@ -52,4 +52,4 @@ else
 	sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
 fi
 
-sh -c "~/.scripts/dwm/status.sh -r"
+sh -c "${HOME}/.scripts/dwm/status.sh -r"

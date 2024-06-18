@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 OPTS="$(getopt --options "f:u:" --longoptions "format:,url:" \
 	--alternative --name "YT CLI Downloader" -- "${@}")"

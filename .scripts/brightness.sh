@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 OPTS="$(getopt --options "udl:s:" \
 	--longoptions "up,down,level:,set:" \
@@ -43,4 +43,4 @@ else
 	sh -c "${CMD} set +${LEVEL}%"
 fi
 
-sh -c "~/.scripts/dwm/status.sh -r"
+sh -c "${HOME}/.scripts/dwm/status.sh -r"

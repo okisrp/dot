@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 OPTS="$(getopt --options "pr" --longoptions "print,refresh" \
 	--alternative --name "DWM Status Bar" -- "${@}")"
@@ -112,5 +112,5 @@ if [[ "${PRINT}" = true ]]; then
 	printf "%s" " $(LYT) ${DEL} $(VOL) ${DEL} $(BRT) ${DEL} $(BAT) ${DEL} $(WLAN) ${DEL} $(DATE) "
 else
 	PID="$( pstree -p | grep -E 'dwm.*sh.*sleep' | sed -r 's/.*\(([0-9]*).*/\1/g' )"
-	[[ ! -z "${PID}" ]] && kill "${PID}"
+	[[ -n "${PID}" ]] && kill "${PID}"
 fi

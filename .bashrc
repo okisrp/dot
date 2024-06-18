@@ -5,19 +5,25 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
+export W3M_DIR="${XDG_DATA_HOME}/w3m"
+
+export TERMINFO="${XDG_DATA_HOME}/terminfo"
+export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
 
 if [[ -d "${HOME}/.local/bin" ]]; then
 	export PATH="${HOME}/.local/bin:$PATH"
 fi
 
-if [[ -x "$(command -v nvim)" ]]; then
-	export EDITOR="$(which nvim)"
+if [[ -x "$( command -v nvim )" ]]; then
+	EDITOR="$(which nvim)"
+	test -t 0 && alias e="${EDITOR}"
 	export MANPAGER="${EDITOR} +Man!"
+	export EDITOR
 fi
 
 if [[ -d "${HOME}/.config/emacs/bin" ]]; then
-	export PATH="${HOME}/.config/emacs/bin:$PATH"
-	export DOOMDIR="${HOME}/.config/doom"
+	export PATH="${XDG_CONFIG_HOME}/emacs/bin:$PATH"
+	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
 fi
 
 export NVM_DIR="${XDG_STATE_HOME}/nvm"
@@ -29,16 +35,23 @@ if [[ -s "${NVM_DIR}/nvm.sh" ]] && [[ -s "${NVM_DIR}/bash_completion" ]]; then
 	source "${NVM_DIR}/bash_completion"
 else
 	PROFILE=/dev/null bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+	source "${NVM_DIR}/nvm.sh"
+	source "${NVM_DIR}/bash_completion"
 fi
 
 [[ ! -t 0 ]] && return
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
 
+test -d "${XDG_STATE_HOME}/less" || mkdir -p "${XDG_STATE_HOME}/less"
 LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+export LESSHISTFILE
 
 shopt -s histappend
 
+export HISTCONTROL="${HISTCONTROL}:ignorespace"
+
+test -d "${XDG_STATE_HOME}/bash" || mkdir -p "${XDG_STATE_HOME}/bash"
 HISTFILE="${XDG_STATE_HOME}/bash/history"
 HISTSIZE=2000
 
@@ -49,7 +62,6 @@ bind "set completion-ignore-case on"
 
 bind '"\ek": previous-history'
 bind '"\ej": next-history'
-bind '"\ea": kill-whole-line'
 
 export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
@@ -70,8 +82,6 @@ if [[ -x "$(command -v dircolors)" ]]; then
 	eval "$(dircolors -b "${DIRCOLORS}")"
 	unset DIRCOLORS
 fi
-
-test -x "$(command -v nvim)" && alias e="$(which nvim)"
 
 alias mv="$(which mv) -i"
 alias cp="$(which cp) -i"
@@ -107,11 +117,12 @@ PUR="${RST}\\[\\033[00;35m\\]"
 PGB="\$(git branch 2> /dev/null | sed -e \
 	'/^[^*]/d' -e 's/* \(.*\)/ ${BLU}(${GRN}\1${BLU})/')"
 
-PS1="${BLU}${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
-PS1="${PS1}${BLU}${PGB}${RED} > ${RST}"
+PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
+PS1+="${BLU}${PGB}${RED} > ${RST}"
+export PS1
 
 unset RST RED GRN YLW BLU PUR PGB
 
-if [[ -x "$(command -v zoxide)" ]];then
-	eval "$(zoxide init bash)"
+if [[ -x "$( command -v zoxide )" ]]; then
+	eval "$( zoxide init bash )"
 fi
