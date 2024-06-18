@@ -25,11 +25,11 @@ super + shift + Print
 super + u
 	kitty
 
-super + o
-	brave
+super + i
+	emacsclient -c -a emacs
 
 super + n
 	ebook-viewer
 
-super + i
-	emacs
+super + o
+	brave

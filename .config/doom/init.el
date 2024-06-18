@@ -3,6 +3,10 @@
 ;; This file controls what Doom modules are enabled and what order they load
 ;; in. Remember to run 'doom sync' after modifying it!
 
+;; HACK Calculate initial frame's properties and only then render it.
+(add-to-list 'initial-frame-alist '(visibility . nil))
+(add-hook 'window-setup-hook 'make-frame-visible)
+
 ;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
 ;;      documentation. There you'll find a link to Doom's Module Index where all
 ;;      of our modules are listed, including what flags they support.
@@ -13,11 +17,6 @@
 ;;
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
-
-(add-to-list 'initial-frame-alist '(visibility . nil))
-
-(add-hook! 'window-setup-hook
-  (make-frame-visible (selected-frame)))
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh

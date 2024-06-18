@@ -45,6 +45,7 @@
     (save-buffers-kill-terminal)))
 
 (bind-key [remap delete-frame] 'my/delete-frame)
+(map! :leader :desc "Quit Emacs" "qq" 'my/delete-frame)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
