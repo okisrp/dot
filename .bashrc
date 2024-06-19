@@ -49,7 +49,7 @@ export LESSHISTFILE
 
 shopt -s histappend
 
-export HISTCONTROL="${HISTCONTROL}:ignorespace"
+export HISTCONTROL="ignoreboth"
 
 test -d "${XDG_STATE_HOME}/bash" || mkdir -p "${XDG_STATE_HOME}/bash"
 HISTFILE="${XDG_STATE_HOME}/bash/history"

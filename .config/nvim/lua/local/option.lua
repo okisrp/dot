@@ -22,13 +22,16 @@ vim.opt.guicursor = ""
 vim.opt.mouse = "a"
 
 vim.opt.list = true
-vim.opt.listchars = { tab = "> ", trail = "·", nbsp = "+" }
+vim.opt.listchars = {
+	tab = "> ",
+	trail = "·",
+	nbsp = "_",
+}
 
-vim.opt.scroll = 15
 vim.opt.scrolloff = 9
-vim.opt.sidescrolloff = 27
 
 vim.opt.hidden = true
+vim.opt.autochdir = true
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
@@ -38,6 +41,7 @@ vim.opt.smartcase = true
 
 vim.opt.wrap = false
 vim.opt.breakindent = true
+vim.opt.linebreak = true
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
@@ -50,3 +54,4 @@ vim.opt.smartindent = true
 
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
+vim.opt.softtabstop = -1
