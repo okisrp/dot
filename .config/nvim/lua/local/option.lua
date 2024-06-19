@@ -31,7 +31,7 @@ vim.opt.listchars = {
 vim.opt.scrolloff = 9
 
 vim.opt.hidden = true
-vim.opt.autochdir = true
+vim.opt.autochdir = false
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
