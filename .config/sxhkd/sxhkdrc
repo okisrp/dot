@@ -2,13 +2,28 @@ XF86AudioMute
 	~/.scripts/volume.sh -mute
 
 XF86Audio{Raise,Lower}Volume
-	~/.scripts/volume.sh {-up, -down}
+	~/.scripts/volume.sh {-up,-down}
 
 XF86MonBrightness{Up,Down}
-	~/.scripts/brightness.sh {-up, -down}
+	~/.scripts/brightness.sh {-up,-down}
 
 XF86AudioPlay
 	playerctl play-pause
+
+super + u
+	"${TERMINAL}"
+
+super + o
+	"${BROWSER}"
+
+super + i
+	emacsclient -c -a emacs
+
+super + n
+	ebook-viewer
+
+super + v
+	virt-manager
 
 F9
 	slock
@@ -21,15 +36,3 @@ super + Print
 
 super + shift + Print
 	scrot -bps
-
-super + u
-	kitty
-
-super + i
-	emacsclient -c -a emacs
-
-super + n
-	ebook-viewer
-
-super + o
-	brave

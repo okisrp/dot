@@ -10,12 +10,15 @@ export W3M_DIR="${XDG_DATA_HOME}/w3m"
 export TERMINFO="${XDG_DATA_HOME}/terminfo"
 export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
 
+export TERMINAL="$( which kitty )"
+export BROWSER="$( which firefox )"
+
 if [[ -d "${HOME}/.local/bin" ]]; then
 	export PATH="${HOME}/.local/bin:$PATH"
 fi
 
 if [[ -x "$( command -v nvim )" ]]; then
-	EDITOR="$(which nvim)"
+	EDITOR="$( which nvim )"
 	test -t 0 && alias e="${EDITOR}"
 	export MANPAGER="${EDITOR} +Man!"
 	export EDITOR
