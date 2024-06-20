@@ -19,7 +19,7 @@ require("local.option")
 require("local.keymap")
 
 require("lazy").setup("plugin", {
-	lockfile = vim.fn.getenv("HOME") .. "/.cache/nvim/lazy/lock.json",
+	lockfile = vim.fn.stdpath("cache") .. "/lazy/lock.json",
 	defaults = {
 		lazy = true,
 	},
@@ -35,5 +35,3 @@ require("lazy").setup("plugin", {
 		notify = false,
 	},
 })
-
-vim.keymap.set("n", "<M-S-l>", vim.cmd.Lazy)
