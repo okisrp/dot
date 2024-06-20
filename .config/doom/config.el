@@ -260,13 +260,6 @@
   (remove-hook 'text-mode-hook 'spell-fu-mode)
   (add-hook 'org-mode-hook 'spell-fu-mode))
 
-(customize-set-variable
- 'default-input-method "ukrainian-computer")
-
-(map! :map help-mode-map
-      :n "M-k" 'help-go-back
-      :n "M-j" 'help-go-forward)
-
 (use-package! google-translate
   :init
   (setq google-translate-preferable-input-methods-alist
