@@ -5,7 +5,7 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
 
-vim.opt.undodir = vim.fn.getenv("HOME") .. "/.cache/nvim/undo"
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
 vim.opt.undofile = true
 
 vim.opt.clipboard:append("unnamedplus")
