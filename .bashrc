@@ -29,19 +29,6 @@ if [[ -d "${HOME}/.config/emacs/bin" ]]; then
 	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
 fi
 
-export NVM_DIR="${XDG_STATE_HOME}/nvm"
-
-test -d "${NVM_DIR}" || mkdir "${NVM_DIR}"
-
-if [[ -s "${NVM_DIR}/nvm.sh" ]] && [[ -s "${NVM_DIR}/bash_completion" ]]; then
-	source "${NVM_DIR}/nvm.sh"
-	source "${NVM_DIR}/bash_completion"
-else
-	PROFILE=/dev/null bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-	source "${NVM_DIR}/nvm.sh"
-	source "${NVM_DIR}/bash_completion"
-fi
-
 [[ ! -t 0 ]] && return
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
