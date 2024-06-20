@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-OPTS="$(getopt --options "pr" --longoptions "print,refresh" \
-	--alternative --name "DWM Status Bar" -- "${@}")"
+SHORTOPTS="pr"
+LONGOPTS="print,refresh"
+
+OPTS="$( getopt -ao "${SHORTOPTS}" -l "${LONGOPTS}" -- "${@}" )"
 
 if [[ "${?}" != 0 ]]; then
 	echo -n "Failed parsing options." >&2
@@ -9,6 +11,8 @@ if [[ "${?}" != 0 ]]; then
 fi
 
 eval set -- "${OPTS}"
+
+unset SHORTOPTS LONGOPTS OPTS
 
 PRINT=true
 REFRESH=false
@@ -30,14 +34,14 @@ RED="^c#d20f39^"
 YLW="^c#df8e1d^"
 GRN="^c#40a02b^"
 BLU="^c#1e66f5^"
-RST="^c#cdd6f4^"
+NC="^c#cdd6f4^"
 
-BAT() {
+BAT0() {
 	CAP="$(cat /sys/class/power_supply/BAT0/capacity)"
 	STAT="$(cat /sys/class/power_supply/BAT0/status)"
 
-	ICON="󰂃"
-	[[ "${STAT}" = "Charging" ]] && ICON="󰂄"
+	ICON="󱟤"
+	[[ "${STAT}" = "Charging" ]] && ICON="󱟦"
 
 	if (( "${CAP}" >= 60 )); then
 		CLR="${GRN}"
@@ -47,12 +51,12 @@ BAT() {
 		CLR="${RED}"
 	fi
 
-	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${RST}" "${CAP}"
+	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${NC}" "${CAP}"
 }
 
-BRT() {
-	BRT="$(calc "100 * $(brightnessctl get) / $(brightnessctl max)")"
-	BRT="$(printf "%.*f" 0 "${BRT:2:-1}")"
+BRIGHTNESS() {
+	BRT="$( calc "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
+	BRT="$( printf "%.*f" 0 "${BRT:2:-1}" )"
 
 	if (( "${BRT}" >= 50 )); then
 		CLR="${BLU}"
@@ -62,55 +66,51 @@ BRT() {
 		CLR="${RED}"
 	fi
 
-	printf "%s%s %s%s%%" "${CLR}" "󱠂" "${RST}" "${BRT}"
+	printf "%s%s %s%s%%" "${CLR}" "󱠂" "${NC}" "${BRT}"
 }
 
-DATE() {
-	DATE="$(date '+%b %d %a')"
-	TIME="$(date '+%R')"
+DATETIME() {
+	DATE="$( date '+%b %d %a' )"
+	TIME="$( date '+%R' )"
 
 	printf "%s %s" "${DATE}" "${TIME}"
 }
 
 WLAN() {
-	case "$(cat /sys/class/net/wl*/operstate 2> /dev/null)" in
+	case "$( cat /sys/class/net/wl*/operstate 2> /dev/null )" in
 		"up" )
-			STAT="${BLU}󱚽 ${RST}Up" ;;
+			STAT="${BLU}󱚽 ${NC}Up" ;;
 		"down" )
-			STAT="${RED}󱚼 ${RST}Dn" ;;
+			STAT="${RED}󱚼 ${NC}Dn" ;;
 	esac
 
 	printf "%s" "${STAT}"
 }
 
-LYT() {
-	KEY="$(xset -q | grep "LED" | awk "{ print \$10 }")"
+VOLUME() {
+	MUTE="$( pactl get-sink-mute @DEFAULT_SINK@ )"
+	VOL="$( pactl get-sink-volume @DEFAULT_SINK@ \
+		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' )"
 
-	LABEL="us" && CLR="${BLU}"
-	[[ "${KEY}" = "00001000" ]] && LABEL="ua" && CLR="${RED}"
-
-	printf "%s%s %s%s" "${CLR}" "󰌑" "${RST}"  "${LABEL}"
-}
-
-VOL() {
-	MUTE="$(pactl get-sink-mute @DEFAULT_SINK@)"
-	VOL="$(pactl get-sink-volume @DEFAULT_SINK@ \
-		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')"
-
-	ICON="󱄡" ; CLR="${GRN}"
+	ICON="󰕾" ; CLR="${GRN}"
 	if [[ "${MUTE}" = "Mute: yes" ]]; then
-		ICON="󰸈" ; CLR="${RED}"
+		ICON="󰖁" ; CLR="${RED}"
 	elif [[ "${VOL}" = "0" ]]; then
 		CLR="${YLW}"
 	fi
 
-	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${RST}" "${VOL}"
+	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${NC}" "${VOL}"
 }
 
 if [[ "${PRINT}" = true ]]; then
-	DEL="󰿟"
-	printf "%s" " $(LYT) ${DEL} $(VOL) ${DEL} $(BRT) ${DEL} $(BAT) ${DEL} $(WLAN) ${DEL} $(DATE) "
-else
+	DL1="[ "
+	DL2=" ]"
+	printf " %s %s %s %s %s " "${DL1}$( VOLUME )${DL2}" \
+		"${DL1}$( BRIGHTNESS )${DL2}" \
+		"${DL1}$( BAT0 )${DL2}" \
+		"${DL1}$( WLAN )${DL2}" \
+		"${DL1}$( DATETIME )${DL2}"
+elif [[ "${REFRESH}" = true ]]; then
 	PID="$( pstree -p | grep -E 'dwm.*sh.*sleep' | sed -r 's/.*\(([0-9]*).*/\1/g' )"
 	[[ -n "${PID}" ]] && kill "${PID}"
 fi
