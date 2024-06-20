@@ -257,7 +257,8 @@
       magit-delete-by-moving-to-trash t)
 
 (when (modulep! :checkers spell +aspell)
-  (remove-hook 'text-mode-hook 'spell-fu-mode))
+  (remove-hook 'text-mode-hook 'spell-fu-mode)
+  (add-hook 'org-mode-hook 'spell-fu-mode))
 
 (customize-set-variable
  'default-input-method "ukrainian-computer")
