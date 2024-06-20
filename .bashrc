@@ -97,21 +97,21 @@ else
 	alias l="$(which ls) -gGAh --group-directories-first --color=auto"
 fi
 
-RST="\\[\\033[00m\\]"
-RED="${RST}\\[\\033[00;31m\\]"
-GRN="${RST}\\[\\033[00;32m\\]"
-YLW="${RST}\\[\\033[00;33m\\]"
-BLU="${RST}\\[\\033[00;34m\\]"
-PUR="${RST}\\[\\033[00;35m\\]"
+NC="\\[\\033[00m\\]"
+RED="${NC}\\[\\033[00;31m\\]"
+GRN="${NC}\\[\\033[00;32m\\]"
+YLW="${NC}\\[\\033[00;33m\\]"
+BLU="${NC}\\[\\033[00;34m\\]"
+PUR="${NC}\\[\\033[00;35m\\]"
 
 PGB="\$(git branch 2> /dev/null | sed -e \
 	'/^[^*]/d' -e 's/* \(.*\)/ ${BLU}(${GRN}\1${BLU})/')"
 
-PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\W${RST}"
-PS1+="${BLU}${PGB}${RED} > ${RST}"
+PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\W${NC}"
+PS1+="${BLU}${PGB}${RED} > ${NC}"
 export PS1
 
-unset RST RED GRN YLW BLU PUR PGB
+unset NC RED GRN YLW BLU PUR PGB
 
 if [[ -x "$( command -v zoxide )" ]]; then
 	eval "$( zoxide init bash )"
