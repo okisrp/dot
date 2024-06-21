@@ -41,7 +41,7 @@ BAT0() {
 	STAT="$(cat /sys/class/power_supply/BAT0/status)"
 
 	ICON="󱟤"
-	[[ "${STAT}" = "Charging" ]] && ICON="󱟦"
+	[[ "${STAT}" = "Charging" ]] && ICON="󰂄"
 
 	if (( "${CAP}" >= 60 )); then
 		CLR="${GRN}"
