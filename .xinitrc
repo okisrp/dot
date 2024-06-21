@@ -25,6 +25,4 @@ if [ -e "${HOME}/.local/share/wallpapers/default" ]; then
 	feh --no-fehbg --bg-scale "${HOME}/.local/share/wallpapers/default" &
 fi
 
-sh -c "emacs --daemon" &
-
 exec dwm
