@@ -108,7 +108,7 @@ YLW='\[\033[00;33m\]'
 BLU='\[\033[00;34m\]'
 PUR='\[\033[00;35m\]'
 
-PS1="${PUR}\u${RED}@${BLU}\h ${GRN}(${YLW}\w${GRN})${RED} \$ ${NC}"
+PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$ ${NC}"
 export PS1
 
 unset NC RED GRN YLW BLU PUR
