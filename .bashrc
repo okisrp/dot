@@ -70,35 +70,39 @@ COMPFILE="/usr/share/bash_completion/bash_completion"
 
 unset PKGFILE COMPFILE
 
-if [[ -x "$(command -v dircolors)" ]]; then
+if [[ -x "$( command -v dircolors )" ]]; then
 	DIRCOLORS="${XDG_CONFIG_HOME}/dircolors"
 	test -r "${DIRCOLORS}" || dircolors -p > "${DIRCOLORS}"
-	eval "$(dircolors -b "${DIRCOLORS}")"
+	eval "$( dircolors -b "${DIRCOLORS}" )"
 	unset DIRCOLORS
 fi
 
-alias mv="$(which mv) -i"
-alias cp="$(which cp) -i"
+alias mv="$( which mv ) -i"
+alias cp="$( which cp ) -i"
 
-alias du="$(which du) -h"
-alias df="$(which df) -h"
-alias free="$(which free) -m"
+alias du="$( which du ) -h"
+alias df="$( which df ) -h"
+alias free="$( which free ) -m"
 
-alias grep="$(which grep) --color=auto"
-alias egrep="$(which grep) --color=auto -E"
-alias ip="$(which ip) -color=auto"
+alias grep="$( which grep ) --color=auto"
+alias egrep="$( which grep ) --color=auto -E"
+alias ip="$( which ip ) -color=auto"
 
-alias cal="$(which cal) -m"
+alias cal="$( which cal ) -m"
 
-test -x "$(command -v bat)" && alias cat="$(which bat)"
+test -x "$( command -v bat )" && alias cat="$( which bat )"
 
-test -x "$(command -v wget)" && alias wget="$(which wget) --no-hsts"
+test -x "$( command -v wget )" && alias wget="$( which wget ) --no-hsts"
 
-if [[ -x "$(command -v eza)" ]]; then
-	alias l="$(which eza) -lA --group-directories-first \
+if [[ -x "$( command -v eza )" ]]; then
+	alias l="$( which eza ) -lA --group-directories-first \
 		--no-user --git --time-style \"+%y/%m/%d\""
 else
-	alias l="$(which ls) -gGAh --group-directories-first --color=auto"
+	alias l="$( which ls ) -gGAh --group-directories-first --color=auto"
+fi
+
+if type -P emacs &> /dev/null; then
+	alias emacs="$( type -P emacsclient ) -tca \"$( type -P emacs ) -nw\""
 fi
 
 NC='\[\033[00m\]'
