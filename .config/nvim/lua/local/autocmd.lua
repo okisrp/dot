@@ -1,5 +1,5 @@
-vim.cmd.autocmd [[
-BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
+vim.cmd [[
+	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
 ]]
 
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -17,3 +17,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank({ timeout = 150 })
 	end,
 })
+
+vim.cmd [[
+	augroup HelpBuffer | au! filetype help only | augroup END
+]]
