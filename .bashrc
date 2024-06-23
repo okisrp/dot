@@ -17,7 +17,7 @@ if [[ -d "${HOME}/.local/bin" ]]; then
 	export PATH="${HOME}/.local/bin:$PATH"
 fi
 
-if [[ -x "$( command -v nvim )" ]]; then
+if type -P nvim &> /dev/null; then
 	EDITOR="$( which nvim )"
 	test -t 0 && alias e="${EDITOR}"
 	export MANPAGER="${EDITOR} +Man!"
