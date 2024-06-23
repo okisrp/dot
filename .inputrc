@@ -1,8 +1,10 @@
-set editing-mode emacs
+$include /etc/inputrc
 
 set bell-style none
 
 set completion-ignore-case on
+
+set editing-mode emacs
 
 set mark-directories on
 set mark-symlinked-directories on
