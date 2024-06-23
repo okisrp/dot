@@ -38,6 +38,7 @@ LESSHISTFILE="${XDG_STATE_HOME}/less/history"
 export LESSHISTFILE
 
 shopt -s histappend
+shopt -s cmdhist
 
 export HISTCONTROL="ignoreboth"
 
@@ -45,8 +46,16 @@ test -d "${XDG_STATE_HOME}/bash" || mkdir -p "${XDG_STATE_HOME}/bash"
 HISTFILE="${XDG_STATE_HOME}/bash/history"
 HISTSIZE=2000
 
+shopt -s globstar
+
 shopt -s autocd
+
 shopt -s cdspell
+shopt -s dirspell
+
+shopt -s no_empty_cmd_completion
+
+shopt -s checkjobs
 
 export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
@@ -92,21 +101,17 @@ else
 	alias l="$(which ls) -gGAh --group-directories-first --color=auto"
 fi
 
-NC="\\[\\033[00m\\]"
-RED="${NC}\\[\\033[00;31m\\]"
-GRN="${NC}\\[\\033[00;32m\\]"
-YLW="${NC}\\[\\033[00;33m\\]"
-BLU="${NC}\\[\\033[00;34m\\]"
-PUR="${NC}\\[\\033[00;35m\\]"
+NC='\[\033[00m\]'
+RED='\[\033[00;31m\]'
+GRN='\[\033[00;32m\]'
+YLW='\[\033[00;33m\]'
+BLU='\[\033[00;34m\]'
+PUR='\[\033[00;35m\]'
 
-PGB="\$(git branch 2> /dev/null | sed -e \
-	'/^[^*]/d' -e 's/* \(.*\)/ ${BLU}(${GRN}\1${BLU})/')"
-
-PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\W${NC}"
-PS1+="${BLU}${PGB}${RED} > ${NC}"
+PS1="${PUR}\u${RED}@${BLU}\h ${GRN}(${YLW}\w${GRN})${RED} \$ ${NC}"
 export PS1
 
-unset NC RED GRN YLW BLU PUR PGB
+unset NC RED GRN YLW BLU PUR
 
 if [[ -x "$( command -v zoxide )" ]]; then
 	eval "$( zoxide init bash )"
