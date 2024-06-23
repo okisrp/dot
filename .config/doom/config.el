@@ -278,17 +278,6 @@
         google-translate-display-translation-phonetic nil
         google-translate-input-method-auto-toggling t))
 
-(defun my/google-translate-listen-translation (language text)
-  "Improved version of the original `google-translate-listen-translation'
-function, but without debuging."
-  (message "Retrieving audio message…")
-  (apply 'call-process google-translate-listen-program nil nil nil
-         (google-translate-format-listen-urls text language))
-  (message "Done playing audio!"))
-
-(defalias 'google-translate-listen-translation
-  (symbol-function 'my/google-translate-listen-translation))
-
 (defun my/google-translate-clipboard (&rest _)
   "Translate text from clipboard by using `google-translate' package."
   (interactive)
@@ -297,6 +286,10 @@ function, but without debuging."
         (output google-translate-output-destination)
         (text (gui-get-selection 'CLIPBOARD 'TEXT)))
     (google-translate-translate source target text output)))
+
+(after! (:all google-translate org)
+  (map! :map org-mode-map
+        :n "K" 'google-translate-at-point))
 
 (map! :after google-translate
       :leader
