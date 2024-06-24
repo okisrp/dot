@@ -287,6 +287,10 @@
         (text (gui-get-selection 'CLIPBOARD 'TEXT)))
     (google-translate-translate source target text output)))
 
+(map! :after google-translate
+      :map help-mode-map
+      :n "K" 'google-translate-at-point)
+
 (after! (:all google-translate org)
   (map! :map org-mode-map
         :n "K" 'google-translate-at-point))
