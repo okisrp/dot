@@ -10,8 +10,13 @@ export W3M_DIR="${XDG_DATA_HOME}/w3m"
 export TERMINFO="${XDG_DATA_HOME}/terminfo"
 export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
 
-export TERMINAL="$( which kitty )"
-export BROWSER="$( which firefox )"
+if [[ -x "$( command -v kitty )" ]]; then
+	export TERMINAL="$( which kitty )"
+fi
+
+if type -P firefox &> /dev/null; then
+	export BROWSER="$( type -P firefox )"
+fi
 
 if [[ -d "${HOME}/.local/bin" ]]; then
 	export PATH="${HOME}/.local/bin:$PATH"
@@ -33,8 +38,7 @@ fi
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
 
-test -d "${XDG_STATE_HOME}/less" || mkdir -p "${XDG_STATE_HOME}/less"
-LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+LESSHISTFILE="${XDG_CACHE_HOME}/lesshist"
 export LESSHISTFILE
 
 shopt -s histappend
@@ -42,8 +46,7 @@ shopt -s cmdhist
 
 export HISTCONTROL="ignoreboth"
 
-test -d "${XDG_STATE_HOME}/bash" || mkdir -p "${XDG_STATE_HOME}/bash"
-HISTFILE="${XDG_STATE_HOME}/bash/history"
+HISTFILE="${XDG_CACHE_HOME}/bashhist"
 HISTSIZE=2000
 
 shopt -s globstar

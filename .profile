@@ -2,4 +2,6 @@ if [ -n "${BASH_VERSION}" ]; then
 	test -r "${HOME}/.bashrc" && . "${HOME}/.bashrc"
 fi
 
-[ "$( tty )" = "/dev/tty1" ] && startx
+if [ "$( tty )" = "/dev/tty1" ]; then
+	test -x "${HOME}/.xinitrc" && exec startx
+fi
