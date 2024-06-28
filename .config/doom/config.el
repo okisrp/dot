@@ -256,6 +256,12 @@
       delete-by-moving-to-trash t
       magit-delete-by-moving-to-trash t)
 
+(set-popup-rule! "^\\*\\(?:Wo\\)?Man "
+  :side 'right :size 0.5 :select t)
+
+(map! :leader
+      (:prefix "h" :n "M-m" (cmd! (call-interactively 'man))))
+
 (when (modulep! :checkers spell +aspell)
   (remove-hook 'text-mode-hook 'spell-fu-mode)
   (add-hook 'org-mode-hook 'spell-fu-mode))
