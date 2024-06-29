@@ -76,6 +76,7 @@ DEPS=(
 	"alsa-utils"
 	"playerctl"
 	"calc"
+	"bc"
 	"terminus-font"
 	"xclip"
 )

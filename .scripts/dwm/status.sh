@@ -55,8 +55,8 @@ BAT0() {
 }
 
 BRIGHTNESS() {
-	BRT="$( calc "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
-	BRT="$( printf "%.*f" 0 "${BRT:2:-1}" )"
+	BRT="$( calc -d "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
+	BRT="$( printf "%.0f" "$( echo "scale=2;${BRT}" | bc )" )"
 
 	if (( "${BRT}" >= 50 )); then
 		CLR="${BLU}"
