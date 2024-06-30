@@ -2,7 +2,11 @@
 
 while true; do
 	xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
-	sleep 1m
+	sleep 1m &
+
+	PID=$!
+	echo "${PID}" > "${XDG_DATA_HOME}/dwm/sleepid"
+	wait $PID
 done &
 
 xrandr --size 1920x1080 &
@@ -15,14 +19,16 @@ unclutter --timeout 3 --start-hidden --jitter 16 &
 
 xinput set-prop "Synaptics TM3336-001" "libinput Tapping Enabled" 1 &
 
-if [ -r "${HOME}/.config/sxhkd/sxhkdrc" ]; then
-	sxhkd -c "${HOME}/.config/sxhkd/sxhkdrc" &
+MAPS="${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"
+if [[ -r "${MAPS}" ]]; then
+	sxhkd -c "${MAPS}" &
 fi
 
 setxkbmap -layout us,ua -option grp:shifts_toggle &
 
-if [ -e "${HOME}/.local/share/wallpapers/default" ]; then
-	feh --no-fehbg --bg-scale "${HOME}/.local/share/wallpapers/default" &
+WALL=${XDG_DATA_HOME}/wallpapers/default
+if [[ -e "${WALL}" ]]; then
+	feh --no-fehbg --bg-scale "${WALL}" &
 fi
 
 exec dwm

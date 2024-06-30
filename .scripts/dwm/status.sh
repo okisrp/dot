@@ -111,6 +111,6 @@ if [[ "${PRINT}" = true ]]; then
 		"${DL1}$( WLAN )${DL2}" \
 		"${DL1}$( DATETIME )${DL2}"
 elif [[ "${REFRESH}" = true ]]; then
-	PID="$( pstree -p | grep -E 'dwm.*sh.*sleep' | sed -r 's/.*\(([0-9]*).*/\1/g' )"
-	[[ -n "${PID}" ]] && kill "${PID}"
+	PID="$( cat ${XDG_DATA_HOME}/dwm/sleepid | tr -d '\n' )"
+	kill -kill $PID
 fi
