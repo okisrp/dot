@@ -25,7 +25,7 @@ super + n
 super + v
 	virt-manager
 
-F9
+ctrl + F9
 	slock
 
 Print
