@@ -1,10 +1,17 @@
 #!/usr/bin/env sh
 
+# ▐▄• ▄ ▪   ▐ ▄ ▪  ▄▄▄▄▄▄▄▄   ▄▄·
+#  █▌█▌▪██ •█▌▐███ •██  ▀▄ █·▐█ ▌▪
+#  ·██· ▐█·▐█▐▐▌▐█· ▐█.▪▐▀▀▄ ██ ▄▄
+# ▪▐█·█▌▐█▌██▐█▌▐█▌ ▐█▌·▐█•█▌▐███▌
+# •▀▀ ▀▀▀▀▀▀▀ █▪▀▀▀ ▀▀▀ .▀  ▀·▀▀▀
+
 while true; do
 	xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
 	sleep 1m &
-
 	PID=$!
+
+	test -d "${XDG_DATA_HOME}/dwm" || mkdir -p "${XDG_DATA_HOME}/dwm"
 	echo "${PID}" > "${XDG_DATA_HOME}/dwm/sleepid"
 	wait $PID
 done &
@@ -20,14 +27,14 @@ unclutter --timeout 3 --start-hidden --jitter 16 &
 xinput set-prop "Synaptics TM3336-001" "libinput Tapping Enabled" 1 &
 
 MAPS="${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"
-if [[ -r "${MAPS}" ]]; then
+if [ -r "${MAPS}" ]; then
 	sxhkd -c "${MAPS}" &
 fi
 
 setxkbmap -layout us,ua -option grp:shifts_toggle &
 
-WALL=${XDG_DATA_HOME}/wallpapers/default
-if [[ -e "${WALL}" ]]; then
+WALL="${XDG_DATA_HOME}/wallpapers/default"
+if [ -e "${WALL}" ]; then
 	feh --no-fehbg --bg-scale "${WALL}" &
 fi
 

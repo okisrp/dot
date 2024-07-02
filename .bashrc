@@ -32,11 +32,6 @@ if type -P firefox &> /dev/null; then
 	export BROWSER
 fi
 
-# Add path for local programs.
-if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin:$PATH"
-fi
-
 # Can't live without vim keys.
 if type -P nvim &> /dev/null; then
 	EDITOR="$( which nvim )"
@@ -45,13 +40,18 @@ if type -P nvim &> /dev/null; then
 	export EDITOR
 fi
 
+# Add path for local programs.
+if [[ -d "${HOME}/.local/bin" ]]; then
+	export PATH="${HOME}/.local/bin:$PATH"
+fi
+
 # Pick your devil.
-if [[ -d "${HOME}/.config/emacs/bin" ]]; then
+if [[ -d "${XDG_CONFIG_HOME}/emacs/bin" ]]; then
 	export PATH="${XDG_CONFIG_HOME}/emacs/bin:$PATH"
 	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
 fi
 
-# Exit if not interactive.
+# If not running interactively, don't do anything.
 [[ ! -t 0 ]] && return
 
 [[ "${DISPLAY}" ]] && shopt -s checkwinsize
