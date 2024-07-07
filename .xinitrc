@@ -3,11 +3,9 @@
 while true; do
 	xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
 	sleep 1m &
-	PID=$!
 
-	test -d "${XDG_DATA_HOME}/dwm" || mkdir -p "${XDG_DATA_HOME}/dwm"
-	echo "${PID}" > "${XDG_DATA_HOME}/dwm/sleepid"
-	wait $PID
+	echo $! > "${XDG_DATA_HOME}/dwmsleeppid"
+	wait $!
 done &
 
 xrandr --size 1920x1080 &

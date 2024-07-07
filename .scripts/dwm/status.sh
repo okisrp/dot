@@ -111,6 +111,6 @@ if [[ "${PRINT}" = true ]]; then
 		"${DL1}$( WLAN )${DL2}" \
 		"${DL1}$( DATETIME )${DL2}"
 elif [[ "${REFRESH}" = true ]]; then
-	PID="$( cat ${XDG_DATA_HOME}/dwm/sleepid | tr -d '\n' )"
+	PID="$( cat "${XDG_DATA_HOME}/dwmsleeppid" | tr -d '\n' )"
 	kill -kill $PID
 fi
