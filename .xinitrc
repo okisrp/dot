@@ -4,8 +4,8 @@ while true; do
 	xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
 	sleep 1m &
 
-	echo $! > "${DWMSLEEPPID}"
-	wait $!
+	echo "${!}" > "${DWMSLEEPPID}"
+	wait "${!}"
 done &
 
 xrandr --size 1920x1080 &
