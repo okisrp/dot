@@ -8,6 +8,7 @@ export DWMSLEEPPID="${XDG_DATA_HOME}/dwmsleeppid"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 export W3M_DIR="${XDG_DATA_HOME}/w3m"
+
 export TERMINFO="${XDG_DATA_HOME}/terminfo"
 export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
 

@@ -28,7 +28,7 @@ return {
 	keys = {
 		{ "<M-f>", ":Telescope current_buffer_fuzzy_find<Cr>" },
 		{ "<M-o>", ":Telescope find_files<Cr>" },
-		{ "<M-r>", ":Telescope oldfiles<Cr>" },
+		{ "<M-l>", ":Telescope live_grep<Cr>" },
 		{ "<M-b>", ":Telescope buffers<Cr>" },
 		{ "<M-h>", ":Telescope help_tags<Cr>" },
 	},
