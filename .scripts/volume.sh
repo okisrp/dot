@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-OPTS="$(getopt --options "udml:s:" \
+OPTS="$( getopt --options "udml:s:" \
 	--longoptions "up,down,mute,level:,set:" \
-	--alternative --name "Manage Volume" -- "${@}")"
+	--alternative -- "${@}" )"
 
 if [[ "${?}" != 0 ]]; then
 	echo "Failed parsing options." >&2
@@ -10,6 +10,7 @@ if [[ "${?}" != 0 ]]; then
 fi
 
 eval set -- "${OPTS}"
+unset OPTS
 
 UP=true
 DOWN=false
@@ -36,7 +37,9 @@ while true; do
 	esac
 done
 
-CMD="$(which pactl)"
+[[ -x "$( command -v pactl )" ]] || exit 1
+
+CMD="$( which pactl )"
 
 UNMUTE() {
 	sh -c "${CMD} set-sink-mute 0 0"
@@ -48,8 +51,10 @@ elif [[ "${MUTE}" = true ]]; then
 	sh -c "${CMD} set-sink-mute 0 toggle"
 elif [[ "${DOWN}" = true ]]; then
 	sh -c "${CMD} set-sink-volume 0 -${LEVEL}%" && UNMUTE
-else
+elif [[ "${UP}" = true ]]; then
 	sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
 fi
 
-sh -c "${HOME}/.scripts/dwm/status.sh -r"
+if test -x "${HOME}/.scripts/dwm/status.sh"; then
+	sh -c "${HOME}/.scripts/dwm/status.sh -r"
+fi
