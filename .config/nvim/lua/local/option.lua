@@ -28,6 +28,11 @@ vim.opt.listchars = {
 	nbsp = "_",
 }
 
+vim.opt.langmap = "йцукенгшщзхїфівапролджєячсмитьбюґ" ..
+	"ЙЦУКЕНГШЩЗХЇФІВАПРОЛДЖЄЯЧСМИТЬБЮҐ;" ..
+	"qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.\\\\" ..
+	"QWERTYUIOP{}ASDFGHJKL:\\\"ZXCVBNM<>\\|" ;
+
 vim.opt.scrolloff = 9
 
 vim.opt.hidden = true
