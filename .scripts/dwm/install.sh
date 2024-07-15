@@ -79,6 +79,8 @@ DEPS=(
 	"bc"
 	"terminus-font"
 	"xclip"
+	"sx"
+	"openssh"
 )
 
 XORGFN() {

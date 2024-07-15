@@ -294,12 +294,16 @@
     (google-translate-translate source target text output)))
 
 (map! :after google-translate
-      :map help-mode-map
+      :map (help-mode-map text-mode-map)
       :n "K" 'google-translate-at-point)
 
 (after! (:all google-translate org)
   (map! :map org-mode-map
         :n "K" 'google-translate-at-point))
+
+(map! :after google-translate
+      :desc "Translate query"
+      :n "M-p" 'google-translate-query-translate)
 
 (map! :after google-translate
       :leader

@@ -5,7 +5,7 @@ if [ -n "${BASH_VERSION}" ]; then
 fi
 
 if [ "$(tty)" = "/dev/tty1" ]; then
-	if [ -x "${HOME}/.xinitrc" ]; then
-		exec startx
+	if [ -x "${XDG_CONFIG_HOME}/sx/sxrc" ]; then
+		exec ssh-agent sx
 	fi
 fi
