@@ -3,13 +3,12 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
-export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+export DWMSLEEPPID="${XDG_DATA_HOME}/dwmsleeppid"
 
+export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 export W3M_DIR="${XDG_DATA_HOME}/w3m"
-
-export DWMSLEEPPID="${XDG_DATA_HOME}/dwmsleeppid"
 
 export TERMINFO="${XDG_DATA_HOME}/terminfo"
 export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
