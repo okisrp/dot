@@ -23,9 +23,9 @@ vim.opt.mouse = "a"
 
 vim.opt.list = true
 vim.opt.listchars = {
-	tab = "> ",
+	tab = "¬ ",
 	trail = "·",
-	nbsp = "_",
+	nbsp = "␣",
 }
 
 vim.opt.langmap = "йцукенгшщзхїфівапролджєячсмитьбюґ" ..
