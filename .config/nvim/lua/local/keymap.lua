@@ -16,3 +16,5 @@ map("c", "<M-j>", "<Down>")
 
 map("v", "<", "<gv")
 map("v", ">", ">gv")
+
+map("nv", "<Space>", "<Nop>")
