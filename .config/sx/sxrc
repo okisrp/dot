@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-STATUS_FN() {
+{
 	sleep 10s
 	while true; do
 		xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
@@ -8,9 +8,7 @@ STATUS_FN() {
 		echo "${!}" > "${DWM_SLEEP_PID}"
 		wait "${!}"
 	done
-}
-
-STATUS_FN &
+} &
 
 xrandr --size 1920x1080 &
 
