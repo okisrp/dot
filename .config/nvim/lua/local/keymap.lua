@@ -4,8 +4,8 @@ local function map(mode, lhs, rhs, opts)
 	vim.keymap.set(t, lhs, rhs, opts)
 end
 
-map("nvi", "<C-q>", vim.cmd.xall)
-map("nvi", "<C-s>", vim.cmd.write)
+map("nvi", "<M-q>", vim.cmd.xall)
+map("nvi", "<M-s>", vim.cmd.write)
 
 map("n", "<M-e>", vim.cmd.bdelete)
 map("n", "<M-k>", vim.cmd.bprevious)
@@ -18,3 +18,5 @@ map("v", "<", "<gv")
 map("v", ">", ">gv")
 
 map("nv", "<Space>", "<Nop>")
+
+map("nvic", "<M-c>", "<Esc>")

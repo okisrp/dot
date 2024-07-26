@@ -1,12 +1,16 @@
 #!/usr/bin/env sh
 
-while true; do
-	xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
-	sleep 1m &
+STATUS_FN() {
+	sleep 10s
+	while true; do
+		xsetroot -name "$( sh -c "${HOME}/.scripts/dwm/status.sh -p" )"
+		sleep 1m &
+		echo "${!}" > "${DWM_SLEEP_PID}"
+		wait "${!}"
+	done
+}
 
-	echo "${!}" > "${DWMSLEEPPID}"
-	wait "${!}"
-done &
+STATUS_FN &
 
 xrandr --size 1920x1080 &
 
@@ -14,11 +18,11 @@ xset r rate 350 55 &
 
 xset s off -dpms &
 
-unclutter --exclude-root &
+unclutter --exclude-root --timeout 5 &
 
 xinput set-prop "Synaptics TM3336-001" "libinput Tapping Enabled" 1 &
 
-setxkbmap -layout "us,pl,ua" -option "grp:shifts_toggle" &
+setxkbmap -layout "us,ua" -option "grp:shifts_toggle" &
 
 SXHKDRC="${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"
 if [ -f "${SXHKDRC}" ]; then

@@ -3,7 +3,7 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
-export DWMSLEEPPID="${XDG_DATA_HOME}/dwmsleeppid"
+export DWM_SLEEP_PID="${XDG_DATA_HOME}/dwmsleeppid"
 
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
@@ -120,6 +120,10 @@ fi
 
 if type -P emacs &> /dev/null; then
 	alias emacs="$( type -P emacsclient ) -tca \"$( type -P emacs ) -nw\""
+fi
+
+if type -P ani-cli &> /dev/null; then
+	alias ani-cli="$( which ani-cli ) --dub"
 fi
 
 if [[ -x "$( command -v zoxide )" ]]; then

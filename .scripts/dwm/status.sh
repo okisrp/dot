@@ -111,6 +111,6 @@ if [[ "${PRINT}" = true ]]; then
 		"${DL1}$( WLAN )${DL2}" \
 		"${DL1}$( DATETIME )${DL2}"
 elif [[ "${REFRESH}" = true ]]; then
-	PID="$( cat "${DWMSLEEPPID}" | tr -d '\n' )"
-	kill -kill $PID
+	PID="$( cat "${DWM_SLEEP_PID}" | tr -d '\n' )"
+	test -n "${PID}" && kill -kill "${PID}"
 fi
