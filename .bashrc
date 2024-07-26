@@ -3,7 +3,7 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
-export DWM_SLEEP_PID="${XDG_DATA_HOME}/dwmsleeppid"
+export DWM_SLEEP_PID="${XDG_DATA_HOME}/dwm_sleep_pid"
 
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
