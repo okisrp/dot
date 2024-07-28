@@ -1,5 +1,3 @@
-.config/doom/*.el
-
-!.config/doom/init.el
-!.config/doom/packages.el
-!.config/doom/config.el
+.config/emacs/*
+!.config/emacs/init.el
+!.config/emacs/early-init.el
