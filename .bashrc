@@ -10,6 +10,22 @@ export W3M_DIR="${XDG_DATA_HOME}/w3m"
 export TERMINFO="${XDG_DATA_HOME}/terminfo"
 export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:/usr/share/terminfo"
 
+export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+export LESSHISTFILE="${XDG_STATE_HOME}/lesshist"
+
+export HISTFILE="${XDG_STATE_HOME}/bashhist"
+export HISTCONTROL="ignoreboth"
+export HISTSIZE=2000
+
+if [[ -d "${HOME}/.local/bin" ]]; then
+	export PATH="${HOME}/.local/bin:$PATH"
+fi
+
+if [[ -d "${XDG_CONFIG_HOME}/emacs/bin" ]]; then
+	export PATH="${XDG_CONFIG_HOME}/emacs/bin:$PATH"
+	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
+fi
+
 if [[ -x "$( command -v kitty )" ]]; then
 	TERMINAL="$( which kitty )"
 	export TERMINAL
@@ -22,18 +38,9 @@ fi
 
 if type -P nvim &> /dev/null; then
 	EDITOR="$( which nvim )"
-	test -t 0 && alias e="${EDITOR}"
 	export MANPAGER="${EDITOR} +Man!"
+	test -t 0 && alias e="${EDITOR}"
 	export EDITOR
-fi
-
-if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin:$PATH"
-fi
-
-if [[ -d "${XDG_CONFIG_HOME}/emacs/bin" ]]; then
-	export PATH="${XDG_CONFIG_HOME}/emacs/bin:$PATH"
-	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
 fi
 
 [[ ! -t 0 ]] && return
@@ -65,13 +72,9 @@ shopt -s checkjobs
 shopt -s histappend
 shopt -s cmdhist
 
-export HISTFILE="${XDG_STATE_HOME}/bashhist"
-export HISTCONTROL="ignoreboth"
-export HISTSIZE=2000
-
-export LESSHISTFILE="${XDG_STATE_HOME}/lesshist"
-
-export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
+	fortune | cowsay -f blowfish
+fi
 
 if [[ -e "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
 	source "/usr/share/doc/pkgfile/command-not-found.bash"
