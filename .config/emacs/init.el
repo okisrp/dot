@@ -2,6 +2,8 @@
 
 (setq inhibit-startup-screen t)
 
+(setq use-dialog-box nil)
+
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 
 (unless (file-directory-p (expand-file-name "tmp/auto-saves/" user-emacs-directory))
@@ -20,24 +22,53 @@
 (when (file-exists-p custom-file)
   (load custom-file nil 'nomessage))
 
-(setq initial-buffer-choice (locate-user-emacs-file "init.el"))
+(setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory))
+(recentf-mode 1)
+
+(setq history-length 20
+      savehist-file (expand-file-name "tmp/history.el" user-emacs-directory))
+(savehist-mode 1)
+
+(setq save-place-file (expand-file-name "tmp/places.el" user-emacs-directory))
+(save-place-mode 1)
+
+(setq global-auto-revert-non-file-buffers t)
+(global-auto-revert-mode 1)
+
+(setq trash-directory (expand-file-name ".local/share/Trash/files/" (getenv "HOME"))
+      delete-by-moving-to-trash t)
 
 (let ((font-family "Iosevka Term"))
   (when (member font-family (font-family-list))
     (dolist (face '(default fixed-pitch))
       (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
 
-(setq help-window-select t)
+(customize-set-variable 'default-input-method "ukrainian-computer")
 
-(add-to-list 'display-buffer-alist '("*Help*" display-buffer-same-window))
+(add-hook 'prog-mode-hook 'electric-pair-local-mode)
+
+(add-to-list 'display-buffer-alist '("\\*Help\\*" display-buffer-same-window))
+
+(setq Man-notify-method 'pushy)
 
 (setq scroll-step 1
       scroll-margin 9)
+
+(setq mouse-wheel-progressive-speed nil
+      mouse-wheel-follow-mouse t
+      mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
+      mouse-wheel-scroll-amount-horizontal 2)
 
 (bind-key "<escape>" 'keyboard-escape-quit)
 
 (bind-keys ("M-p" . previous-buffer)
 	   ("M-n" . next-buffer))
+
+(bind-keys :prefix "M-SPC"
+	   :prefix-map M-SPC-prefix-map
+	   ("k" . kill-current-buffer)
+	   ("i" . ibuffer)
+	   ("r" . recentf-open-files))
 
 (setq straight-repository-branch "develop")
 
@@ -82,7 +113,7 @@
   (vertico-resize nil)
   (vertico-cycle t)
   :init
-  (vertico-mode))
+  (vertico-mode 1))
 
 (use-package orderless
   :custom
@@ -94,7 +125,13 @@
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :init
-  (marginalia-mode))
+  (marginalia-mode 1))
+
+(use-package which-key
+  :custom
+  (which-key-min-column-description-width 20)
+  :config
+  (which-key-mode 1))
 
 (use-package google-translate
   :init
@@ -114,7 +151,6 @@
         google-translate-display-translation-phonetic nil
         google-translate-input-method-auto-toggling t)
   (defun my/google-translate-clipboard (&rest _)
-    "Translate text from clipboard by using `google-translate' package."
     (interactive)
     (let ((source google-translate-default-source-language)
           (target google-translate-default-target-language)
@@ -126,17 +162,5 @@
 	     ("q" . google-translate-query-translate)
 	     ("r" . google-translate-query-tranlate-reverse)
 	     ("s" . google-translate-smooth-translate)
+	     ("w" . google-translate-at-point)
 	     ("c" . my/google-translate-clipboard)))
-
-(defun my/lookup-interpretation
-    (&optional _ text &rest _)
-  "Look up interpretation of text."
-  (interactive
-   (list current-prefix-arg
-         (minibuffer-with-setup-hook
-             (lambda (&rest _)
-               (set-input-method "ukrainian-computer"))
-           (read-string
-            (propertize "Look up interpretation of: " 'face 'success)))))
-  (let ((url "https://slovnyk.ua/index.php?swrd=%s"))
-    (browse-url-with-browser-kind 'external (format url text))))
