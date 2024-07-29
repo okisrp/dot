@@ -79,7 +79,7 @@ shopt -s cmdhist
 
 if [[ "$( tty )" != "/dev/tty1" ]]; then
 	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
-		fortune | cowsay -f bud-frogs
+		fortune | tr -d '\t' | cowsay -f bud-frogs
 	fi
 fi
 
