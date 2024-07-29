@@ -77,8 +77,10 @@ shopt -s checkjobs
 shopt -s histappend
 shopt -s cmdhist
 
-if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
-	fortune | cowsay -f bud-frogs
+if [[ "$( tty )" != "/dev/tty1" ]]; then
+	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
+		fortune | cowsay -f bud-frogs
+	fi
 fi
 
 if [[ -e "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
