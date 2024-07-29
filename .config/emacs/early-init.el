@@ -13,3 +13,6 @@
 
 (add-to-list 'default-frame-alist '(menu-bar-lines . nil))
 (add-to-list 'default-frame-alist '(tool-bar-lines nil))
+
+(add-to-list 'initial-frame-alist '(visibility . nil))
+(add-hook 'window-setup-hook 'make-frame-visible)
