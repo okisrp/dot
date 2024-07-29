@@ -4,7 +4,8 @@
 
 (setq use-dialog-box nil)
 
-(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory)))
+      make-backup-files t)
 
 (unless (file-directory-p (expand-file-name "tmp/auto-saves/" user-emacs-directory))
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) 'parent))
@@ -15,7 +16,8 @@
 (unless (file-directory-p (expand-file-name "tmp/lock-files/" user-emacs-directory))
   (make-directory (expand-file-name "tmp/lock-files/" user-emacs-directory) 'parent))
 
-(setq lock-file-name-transforms `((".*" ,(expand-file-name "tmp/lock-files/" user-emacs-directory) t)))
+(setq lock-file-name-transforms `((".*" ,(expand-file-name "tmp/lock-files/" user-emacs-directory) t))
+      create-lockfiles t)
 
 (setq custom-file (locate-user-emacs-file "custom.el"))
 
@@ -50,6 +52,10 @@
 (add-to-list 'display-buffer-alist '("\\*Help\\*" display-buffer-same-window))
 
 (setq Man-notify-method 'pushy)
+
+(setq initial-major-mode 'fundamental-mode
+      initial-scratch-message "# This buffer is for notes you don't want to save.
+# If you want to create a file, visit it with \\[find-file].\n\n")
 
 (setq scroll-step 1
       scroll-margin 9)

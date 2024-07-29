@@ -4,7 +4,7 @@
 
 (setq native-comp-async-report-warnings-errors 'silent)
 
-(startup-redirect-eln-cache (expand-file-name "tmp/eln-cache" user-emacs-directory))
+(startup-redirect-eln-cache (expand-file-name "tmp/eln-cache/" user-emacs-directory))
 
 (customize-set-variable 'frame-resize-pixelwise t)
 
