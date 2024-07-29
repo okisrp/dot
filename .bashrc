@@ -17,6 +17,11 @@ export HISTFILE="${XDG_STATE_HOME}/bashhist"
 export HISTCONTROL="ignoreboth"
 export HISTSIZE=2000
 
+export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
+	--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+	--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
 if [[ -d "${HOME}/.local/bin" ]]; then
 	export PATH="${HOME}/.local/bin:$PATH"
 fi
@@ -83,11 +88,6 @@ fi
 if [[ -e "/usr/share/bash-completion/bash_completion" ]]; then
 	source "/usr/share/bash-completion/bash_completion"
 fi
-
-export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
-	--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
-	--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
-	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 if [[ -x "$( command -v dircolors )" ]]; then
 	if [[ ! -e "${XDG_CONFIG_HOME}/dircolors" ]]; then
