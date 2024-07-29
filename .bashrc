@@ -73,7 +73,7 @@ shopt -s histappend
 shopt -s cmdhist
 
 if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
-	fortune | cowsay -f blowfish
+	fortune | cowsay -f bud-frogs
 fi
 
 if [[ -e "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
