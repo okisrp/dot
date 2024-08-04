@@ -1,84 +1,13 @@
-;;; init.el --- Initial configuration. -*- lexical-binding: t -*-
+;;; init.el --- Main configuration. -*- lexical-binding: t -*-
 
 (setq inhibit-startup-screen t)
 
-(setq use-dialog-box nil)
+(defun display-startup-echo-area-message (&rest _)
+  (let ((time (format "%.1f" (float-time (time-subtract after-init-time before-init-time)))))
+    (message "Loaded in %s seconds with %d garbage collection." time gcs-done)))
 
-(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory)))
-      make-backup-files t)
-
-(unless (file-directory-p (expand-file-name "tmp/auto-saves/" user-emacs-directory))
-  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) 'parent))
-
-(setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
-      auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-
-(unless (file-directory-p (expand-file-name "tmp/lock-files/" user-emacs-directory))
-  (make-directory (expand-file-name "tmp/lock-files/" user-emacs-directory) 'parent))
-
-(setq lock-file-name-transforms `((".*" ,(expand-file-name "tmp/lock-files/" user-emacs-directory) t))
-      create-lockfiles t)
-
-(setq custom-file (locate-user-emacs-file "custom.el"))
-
-(when (file-exists-p custom-file)
-  (load custom-file nil 'nomessage))
-
-(setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory))
-(recentf-mode 1)
-
-(setq history-length 20
-      savehist-file (expand-file-name "tmp/history.el" user-emacs-directory))
-(savehist-mode 1)
-
-(setq save-place-file (expand-file-name "tmp/places.el" user-emacs-directory))
-(save-place-mode 1)
-
-(setq global-auto-revert-non-file-buffers t)
-(global-auto-revert-mode 1)
-
-(setq trash-directory (expand-file-name ".local/share/Trash/files/" (getenv "HOME"))
-      delete-by-moving-to-trash t)
-
-(let ((font-family "Iosevka Term"))
-  (when (member font-family (font-family-list))
-    (dolist (face '(default fixed-pitch))
-      (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
-
-(customize-set-variable 'default-input-method "ukrainian-computer")
-
-(add-hook 'prog-mode-hook 'electric-pair-local-mode)
-
-(add-to-list 'display-buffer-alist '("\\*Help\\*" display-buffer-same-window))
-
-(setq Man-notify-method 'pushy)
-
-(setq initial-major-mode 'fundamental-mode
-      initial-scratch-message "# This buffer is for notes you don't want to save.
-# If you want to create a file, visit it with \\[find-file].\n\n")
-
-(setq scroll-step 1
-      scroll-margin 9)
-
-(setq mouse-wheel-progressive-speed nil
-      mouse-wheel-follow-mouse t
-      mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
-      mouse-wheel-scroll-amount-horizontal 2)
-
-(bind-key "<escape>" 'keyboard-escape-quit)
-
-(bind-keys ("M-p" . previous-buffer)
-	   ("M-n" . next-buffer))
-
-(bind-keys :prefix "M-SPC"
-	   :prefix-map M-SPC-prefix-map
-	   ("k" . kill-current-buffer)
-	   ("i" . ibuffer)
-	   ("r" . recentf-open-files))
-
-(setq straight-repository-branch "develop")
-
-(setq straight-base-dir (expand-file-name "tmp/" user-emacs-directory))
+(setq straight-repository-branch "develop"
+      straight-base-dir (expand-file-name "tmp/" user-emacs-directory))
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -96,18 +25,130 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-vc-git-default-clone-depth 1)
+(setq straight-vc-git-default-clone-depth 1
+      straight-use-package-by-default t)
 
 (straight-use-package 'use-package)
 
-(setq straight-use-package-by-default t)
-
 (use-package catppuccin-theme
-  :straight (catppuccin-theme :host github :repo "catppuccin/emacs")
+  :straight
+  (catppuccin-theme :host github :repo "catppuccin/emacs")
   :custom
   (catppuccin-flavor 'latte)
+  (catppuccin-highlight-matches t)
+  (catppuccin-italic-comments t)
   :config
-  (load-theme 'catppuccin 'no-confirm))
+  (load-theme 'catppuccin 'no-confirm)
+  (defface catppuccin-theme-visible-bell
+    `((t :background ,(catppuccin-get-color 'maroon)
+	 :foreground ,(catppuccin-get-color 'base))) "")
+  (defun catppuccin-theme-visible-bell-fn (&rest _)
+    (let* ((face (if (facep 'mode-line-active)
+                     'mode-line-active
+                   'mode-line))
+           (buf (current-buffer))
+           (cookie (face-remap-add-relative face 'catppuccin-theme-visible-bell)))
+      (force-mode-line-update)
+      (run-with-timer 0.15 nil
+                      (lambda ()
+			(with-current-buffer buf
+                          (face-remap-remove-relative cookie)
+                          (force-mode-line-update))))))
+  (setq ring-bell-function 'catppuccin-theme-visible-bell-fn
+	visible-bell t)
+  (global-hl-line-mode 1)
+  (blink-cursor-mode 0))
+
+(let ((font-family "Iosevka Term"))
+  (when (member font-family (font-family-list))
+    (dolist (face '(default fixed-pitch))
+      (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
+
+(add-hook 'write-file-functions 'delete-trailing-whitespace)
+
+(dolist (hook '(prog-mode-hook conf-mode-hook))
+  (add-hook hook 'electric-pair-local-mode))
+
+(setq uniquify-buffer-name-style 'forward)
+
+(setq switch-to-prev-buffer-skip-regexp "\*[^*]+\*")
+
+(setq display-buffer-alist
+      '(("\\*Help\\*" (display-buffer-same-window))
+	("\\*Occur\\*" (display-buffer-same-window))))
+
+(setq Man-notify-method 'pushy)
+
+(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory)))
+      make-backup-file t)
+
+(let ((directory (expand-file-name "tmp/lock-files/" user-emacs-directory)))
+  (unless (file-directory-p directory)
+    (make-directory directory 'parents))
+  (setq lock-file-name-transforms `((".*" ,directory t))
+	create-lockfiles t))
+
+(let ((directory (expand-file-name "tmp/auto-saves/" user-emacs-directory)))
+  (unless (file-directory-p directory)
+    (make-directory directory 'parents))
+  (setq auto-save-list-file-prefix (expand-file-name "sessions/" directory)
+	auto-save-file-name-transforms `((".*" ,directory t))))
+
+(setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory))
+(recentf-mode 1)
+
+(setq savehist-file (expand-file-name "tmp/history.el" user-emacs-directory)
+      history-length 20)
+(savehist-mode 1)
+
+(setq save-place-file (expand-file-name "tmp/places.el" user-emacs-directory))
+(save-place-mode 1)
+
+(setq transient-history-file (expand-file-name "tmp/transient/history.el" user-emacs-directory)
+      transient-levels-file (expand-file-name "tmp/transient/levels.el" user-emacs-directory)
+      transient-values-file (expand-file-name "tmp/transient/values.el" user-emacs-directory))
+
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(when (file-exists-p custom-file)
+  (load custom-file nil 'nomessage))
+
+(setq global-auto-revert-non-file-buffers t)
+(global-auto-revert-mode 1)
+
+(delete-selection-mode 1)
+
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      read-file-name-completion-ignore-case t)
+
+(setq scroll-step 1
+      scroll-margin 2)
+
+(setq mouse-wheel-progressive-speed nil
+      mouse-wheel-follow-mouse t
+      mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
+      mouse-wheel-scroll-amount-horizontal 2)
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(bind-key "<escape>" 'keyboard-escape-quit)
+
+(unbind-key "C-x C-u")
+
+(bind-keys ("M-p" . previous-buffer)
+	   ("M-n" . next-buffer))
+
+(bind-keys :prefix "M-SPC"
+	   :prefix-map M-SPC-prefix-map
+	   ("k" . kill-current-buffer)
+	   ("i" . ibuffer)
+	   ("r" . recentf-open-files))
+
+(use-package which-key
+  :custom
+  (which-key-min-column-description-width 20)
+  :config
+  (which-key-mode 1))
 
 (use-package vertico
   :bind (:map vertico-map
@@ -128,16 +169,8 @@
   (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package marginalia
-  :bind (:map minibuffer-local-map
-              ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode 1))
-
-(use-package which-key
-  :custom
-  (which-key-min-column-description-width 20)
-  :config
-  (which-key-mode 1))
 
 (use-package google-translate
   :init
@@ -156,7 +189,7 @@
         google-translate-show-phonetic t
         google-translate-display-translation-phonetic nil
         google-translate-input-method-auto-toggling t)
-  (defun my/google-translate-clipboard (&rest _)
+  (defun google-translate-clipboard (&rest _)
     (interactive)
     (let ((source google-translate-default-source-language)
           (target google-translate-default-target-language)
@@ -166,7 +199,7 @@
   (bind-keys :prefix "M-o"
 	     :prefix-map M-o-prefix-map
 	     ("q" . google-translate-query-translate)
-	     ("r" . google-translate-query-tranlate-reverse)
+	     ("r" . google-translate-query-translate-reverse)
 	     ("s" . google-translate-smooth-translate)
 	     ("w" . google-translate-at-point)
-	     ("c" . my/google-translate-clipboard)))
+	     ("c" . google-translate-clipboard)))

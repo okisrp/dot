@@ -21,18 +21,3 @@ super + i
 
 super + n
 	ebook-viewer
-
-super + v
-	virt-manager
-
-ctrl + F9
-	slock
-
-Print
-	scrot -p
-
-super + Print
-	scrot -bpu
-
-super + shift + Print
-	scrot -bps

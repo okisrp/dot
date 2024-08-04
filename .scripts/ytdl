@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+URL="$( xclip -selection clipboard -out )"
+DIR="${XDG_MUSIC_DIR:-"${HOME}/mc/"}"
+
+yt-dlp --extract-audio --audio-format 'opus' --audio-quality 0 \
+       --no-playlist --paths "${DIR}" "${URL}"

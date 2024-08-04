@@ -1,7 +1,6 @@
-export XDG_DATA_HOME="${HOME}/.local/share"
-export XDG_STATE_HOME="${HOME}/.local/state"
-export XDG_CACHE_HOME="${HOME}/.cache"
-export XDG_CONFIG_HOME="${HOME}/.config"
+if [[ -d "${HOME}/.local/bin" ]]; then
+	export PATH="${HOME}/.local/bin:$PATH"
+fi
 
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
@@ -22,17 +21,8 @@ export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
-if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin:$PATH"
-fi
-
-if [[ -d "${XDG_CONFIG_HOME}/emacs/bin" ]]; then
-	export PATH="${XDG_CONFIG_HOME}/emacs/bin:$PATH"
-	export DOOMDIR="${XDG_CONFIG_HOME}/doom"
-fi
-
-if [[ -x "$( command -v kitty )" ]]; then
-	TERMINAL="$( which kitty )"
+if [[ -x "$( command -v st )" ]]; then
+	TERMINAL="$( which st )"
 	export TERMINAL
 fi
 
@@ -120,14 +110,6 @@ if [[ -x "$( command -v eza )" ]]; then
 		--no-user --git --time-style \"+%y/%m/%d\""
 else
 	alias l="$( which ls ) -gGAh --group-directories-first --color=auto"
-fi
-
-if type -P emacs &> /dev/null; then
-	alias emacs="$( type -P emacsclient ) -tca \"$( type -P emacs ) -nw\""
-fi
-
-if type -P ani-cli &> /dev/null; then
-	alias ani-cli="$( which ani-cli ) --dub"
 fi
 
 if [[ -x "$( command -v zoxide )" ]]; then
