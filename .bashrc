@@ -49,10 +49,18 @@ YLW='\[\033[00;33m\]'
 BLU='\[\033[00;34m\]'
 PUR='\[\033[00;35m\]'
 
-PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$ ${NC}"
-export PS1
+if ! grep -q "/dev/tty" <<< "$( tty )"; then
+	PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$ ${NC}"
+	export PS1
+fi
 
 unset NC RED GRN YLW BLU PUR
+
+if [[ "$( tty )" != "/dev/tty1" ]]; then
+	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
+		fortune | tr -d '\t' | cowsay -f bud-frogs
+	fi
+fi
 
 shopt -s globstar
 
@@ -66,12 +74,6 @@ shopt -s checkjobs
 
 shopt -s histappend
 shopt -s cmdhist
-
-if [[ "$( tty )" != "/dev/tty1" ]]; then
-	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
-		fortune | tr -d '\t' | cowsay -f bud-frogs
-	fi
-fi
 
 if [[ -e "/usr/share/doc/pkgfile/command-not-found.bash" ]]; then
 	source "/usr/share/doc/pkgfile/command-not-found.bash"
