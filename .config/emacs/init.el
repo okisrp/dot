@@ -64,6 +64,9 @@
     (dolist (face '(default fixed-pitch))
       (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
 
+(setq-default tab-width 4
+	      indent-tabs-mode t)
+
 (add-hook 'write-file-functions 'delete-trailing-whitespace)
 
 (dolist (hook '(prog-mode-hook conf-mode-hook))
@@ -112,6 +115,12 @@
 (when (file-exists-p custom-file)
   (load custom-file nil 'nomessage))
 
+(when-let ((env (getenv "XDG_DATA_HOME")))
+  (setq trash-directory (expand-file-name "Trash/files" env)
+	delete-by-moving-to-trash t))
+
+(setq dired-kill-when-opening-new-dired-buffer t)
+
 (setq global-auto-revert-non-file-buffers t)
 (global-auto-revert-mode 1)
 
@@ -129,7 +138,7 @@
       mouse-wheel-scroll-amount '(2 ((shift) . hscroll))
       mouse-wheel-scroll-amount-horizontal 2)
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 (bind-key "<escape>" 'keyboard-escape-quit)
 
