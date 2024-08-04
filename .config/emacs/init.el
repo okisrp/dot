@@ -41,7 +41,7 @@
   (load-theme 'catppuccin 'no-confirm)
   (defface catppuccin-theme-visible-bell
     `((t :background ,(catppuccin-get-color 'maroon)
-	 :foreground ,(catppuccin-get-color 'base))) "")
+		 :foreground ,(catppuccin-get-color 'base))) "")
   (defun catppuccin-theme-visible-bell-fn (&rest _)
     (let* ((face (if (facep 'mode-line-active)
                      'mode-line-active
@@ -51,11 +51,11 @@
       (force-mode-line-update)
       (run-with-timer 0.15 nil
                       (lambda ()
-			(with-current-buffer buf
+						(with-current-buffer buf
                           (face-remap-remove-relative cookie)
                           (force-mode-line-update))))))
   (setq ring-bell-function 'catppuccin-theme-visible-bell-fn
-	visible-bell t)
+		visible-bell t)
   (global-hl-line-mode 1)
   (blink-cursor-mode 0))
 
@@ -65,7 +65,7 @@
       (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
 
 (setq-default tab-width 4
-	      indent-tabs-mode t)
+			  indent-tabs-mode t)
 
 (add-hook 'write-file-functions 'delete-trailing-whitespace)
 
@@ -78,7 +78,7 @@
 
 (setq display-buffer-alist
       '(("\\*Help\\*" (display-buffer-same-window))
-	("\\*Occur\\*" (display-buffer-same-window))))
+		("\\*Occur\\*" (display-buffer-same-window))))
 
 (setq Man-notify-method 'pushy)
 
@@ -89,13 +89,13 @@
   (unless (file-directory-p directory)
     (make-directory directory 'parents))
   (setq lock-file-name-transforms `((".*" ,directory t))
-	create-lockfiles t))
+		create-lockfiles t))
 
 (let ((directory (expand-file-name "tmp/auto-saves/" user-emacs-directory)))
   (unless (file-directory-p directory)
     (make-directory directory 'parents))
   (setq auto-save-list-file-prefix (expand-file-name "sessions/" directory)
-	auto-save-file-name-transforms `((".*" ,directory t))))
+		auto-save-file-name-transforms `((".*" ,directory t))))
 
 (setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory))
 (recentf-mode 1)
@@ -117,7 +117,7 @@
 
 (when-let ((env (getenv "XDG_DATA_HOME")))
   (setq trash-directory (expand-file-name "Trash/files" env)
-	delete-by-moving-to-trash t))
+		delete-by-moving-to-trash t))
 
 (setq dired-kill-when-opening-new-dired-buffer t)
 
@@ -145,13 +145,13 @@
 (unbind-key "C-x C-u")
 
 (bind-keys ("M-p" . previous-buffer)
-	   ("M-n" . next-buffer))
+		   ("M-n" . next-buffer))
 
 (bind-keys :prefix "M-SPC"
-	   :prefix-map M-SPC-prefix-map
-	   ("k" . kill-current-buffer)
-	   ("i" . ibuffer)
-	   ("r" . recentf-open-files))
+		   :prefix-map M-SPC-prefix-map
+		   ("k" . kill-current-buffer)
+		   ("i" . ibuffer)
+		   ("r" . recentf-open-files))
 
 (use-package which-key
   :custom
@@ -161,8 +161,8 @@
 
 (use-package vertico
   :bind (:map vertico-map
-	      ("M-p" . vertico-previous)
-	      ("M-n" . vertico-next))
+			  ("M-p" . vertico-previous)
+			  ("M-n" . vertico-next))
   :custom
   (vertico-scroll-margin 2)
   (vertico-count 10)
@@ -206,9 +206,9 @@
           (text (gui-get-selection 'CLIPBOARD 'TEXT)))
       (google-translate-translate source target text output)))
   (bind-keys :prefix "M-o"
-	     :prefix-map M-o-prefix-map
-	     ("q" . google-translate-query-translate)
-	     ("r" . google-translate-query-translate-reverse)
-	     ("s" . google-translate-smooth-translate)
-	     ("w" . google-translate-at-point)
-	     ("c" . google-translate-clipboard)))
+			 :prefix-map M-o-prefix-map
+			 ("q" . google-translate-query-translate)
+			 ("r" . google-translate-query-translate-reverse)
+			 ("s" . google-translate-smooth-translate)
+			 ("w" . google-translate-at-point)
+			 ("c" . google-translate-clipboard)))

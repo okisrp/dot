@@ -2,8 +2,8 @@
 
 (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'emacs-startup-hook
-	  (lambda (&rest _)
-	    (setq gc-cons-threshold (expt 2 23))))
+		  (lambda (&rest _)
+			(setq gc-cons-threshold (expt 2 23))))
 
 (setq package-enable-at-startup nil)
 
