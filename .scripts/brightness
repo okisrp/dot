@@ -54,6 +54,6 @@ elif [[ "${DOWN}" = true ]]; then
 	sh -c "${CMD} set ${LEVEL}-%"
 fi
 
-if test -x "${HOME}/.scripts/dwm/status.sh"; then
-	sh -c "${HOME}/.scripts/dwm/status.sh -r"
+if test -x "${HOME}/.scripts/dwm/status"; then
+	sh -c "${HOME}/.scripts/dwm/status -r"
 fi
