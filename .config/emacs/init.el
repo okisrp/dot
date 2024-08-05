@@ -6,8 +6,11 @@
   (let ((time (format "%.1f" (float-time (time-subtract after-init-time before-init-time)))))
     (message "Loaded in %s seconds with %d garbage collection." time gcs-done)))
 
+(setq idle-update-delay 1.0)
+
 (setq straight-repository-branch "develop"
-      straight-base-dir (expand-file-name "tmp/" user-emacs-directory))
+      straight-base-dir (expand-file-name "tmp/" user-emacs-directory)
+	  straight-check-for-modifications nil)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -59,6 +62,25 @@
   (global-hl-line-mode 1)
   (blink-cursor-mode 0))
 
+(setq-default mode-line-format
+			  '("%e"
+				(:propertize " " display (raise +0.1)) ;; Top padding
+				(:propertize " " display (raise -0.1)) ;; Bottom padding
+
+				(:propertize "λ " face font-lock-comment-face)
+				mode-line-frame-identification
+				mode-line-buffer-identification
+				(:eval (when-let (vc vc-mode)
+						 (list (propertize "   " 'face 'font-lock-comment-face)
+							   (propertize (substring vc 5)
+										   'face 'font-lock-comment-face))))
+				(:eval (propertize
+						" " 'display
+						`((space :align-to
+								 (-  (+ right right-fringe right-margin)
+									 ,(+ 2 (string-width "%4l:3%c")))))))
+				(:propertize "%4l:%c" face mode-line-buffer-id)))
+
 (let ((font-family "Iosevka Term"))
   (when (member font-family (font-family-list))
     (dolist (face '(default fixed-pitch))
@@ -77,7 +99,7 @@
 (setq switch-to-prev-buffer-skip-regexp "\*[^*]+\*")
 
 (setq display-buffer-alist
-      '(("\\*Help\\*" (display-buffer-same-window))
+      '(("\\*[Hh]elp*" (display-buffer-same-window))
 		("\\*Occur\\*" (display-buffer-same-window))))
 
 (setq Man-notify-method 'pushy)
@@ -123,6 +145,8 @@
 
 (setq global-auto-revert-non-file-buffers t)
 (global-auto-revert-mode 1)
+
+(setq backward-delete-char-untabify-method 'hungry)
 
 (delete-selection-mode 1)
 
