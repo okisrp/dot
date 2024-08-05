@@ -58,7 +58,7 @@ unset NC RED GRN YLW BLU PUR
 
 if [[ "$( tty )" != "/dev/tty1" ]]; then
 	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
-		fortune | tr -d '\t' | cowsay -f bud-frogs
+		fortune -s | tr -d '\t' | cowsay -f bud-frogs
 	fi
 fi
 
