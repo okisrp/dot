@@ -20,5 +20,7 @@
 (add-to-list 'default-frame-alist '(menu-bar-lines . nil))
 (add-to-list 'default-frame-alist '(tool-bar-lines nil))
 
+;; NOTE: If you're using `DOOM-emacs' framework that put these lines
+;; at the begining of `$DOOMDIR/init.el' file.
 ;; (add-to-list 'initial-frame-alist '(visibility . nil))
 ;; (add-hook 'window-setup-hook 'make-frame-visible)
