@@ -41,6 +41,8 @@
   (catppuccin-highlight-matches t)
   (catppuccin-italic-comments t)
   :config
+  (unless (window-system)
+	(setq catppuccin-flavor 'mocha))
   (load-theme 'catppuccin 'no-confirm)
   (defface catppuccin-theme-visible-bell
     `((t :background ,(catppuccin-get-color 'maroon)
@@ -64,16 +66,11 @@
 
 (setq-default mode-line-format
 			  '("%e"
-				(:propertize " " display (raise +0.1)) ;; Top padding
-				(:propertize " " display (raise -0.1)) ;; Bottom padding
-
+				(:propertize " " display (raise +0.1))
+				(:propertize " " display (raise -0.1))
 				(:propertize "λ " face font-lock-comment-face)
 				mode-line-frame-identification
 				mode-line-buffer-identification
-				(:eval (when-let (vc vc-mode)
-						 (list (propertize "   " 'face 'font-lock-comment-face)
-							   (propertize (substring vc 5)
-										   'face 'font-lock-comment-face))))
 				(:eval (propertize
 						" " 'display
 						`((space :align-to
@@ -81,10 +78,10 @@
 									 ,(+ 2 (string-width "%4l:3%c")))))))
 				(:propertize "%4l:%c" face mode-line-buffer-id)))
 
-(let ((font-family "Iosevka Term"))
+(let ((font-family "Victor Mono"))
   (when (member font-family (font-family-list))
     (dolist (face '(default fixed-pitch))
-      (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
+      (set-face-attribute face nil :font (font-spec :family font-family :size 20 :weight 'medium)))))
 
 (setq-default tab-width 4
 			  indent-tabs-mode t)
@@ -100,7 +97,8 @@
 
 (setq display-buffer-alist
       '(("\\*[Hh]elp*" (display-buffer-same-window))
-		("\\*Occur\\*" (display-buffer-same-window))))
+		("\\*Occur\\*" (display-buffer-same-window))
+		("\\*Shell Command Output\\*" (display-buffer-same-window))))
 
 (setq Man-notify-method 'pushy)
 
@@ -119,7 +117,9 @@
   (setq auto-save-list-file-prefix (expand-file-name "sessions/" directory)
 		auto-save-file-name-transforms `((".*" ,directory t))))
 
-(setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory))
+(setq recentf-save-file (expand-file-name "tmp/recentf.el" user-emacs-directory)
+	  recentf-exclude '("emacs/tmp/")
+	  recentf-max-saved-items 20)
 (recentf-mode 1)
 
 (setq savehist-file (expand-file-name "tmp/history.el" user-emacs-directory)
@@ -137,9 +137,14 @@
 (when (file-exists-p custom-file)
   (load custom-file nil 'nomessage))
 
-(when-let ((env (getenv "XDG_DATA_HOME")))
-  (setq trash-directory (expand-file-name "Trash/files" env)
+(when-let ((directory (or (getenv "XDG_DATA_HOME")
+						  (expand-file-name ".local/share/" (getenv "HOME"))))
+		   (_ (file-directory-p directory)))
+  (setq trash-directory (expand-file-name "Trash/files" directory)
 		delete-by-moving-to-trash t))
+
+(setq bookmark-default-file (expand-file-name "tmp/bookmarks.el" user-emacs-directory)
+	  bookmark-save-flag t)
 
 (setq dired-kill-when-opening-new-dired-buffer t)
 
@@ -149,10 +154,6 @@
 (setq backward-delete-char-untabify-method 'hungry)
 
 (delete-selection-mode 1)
-
-(setq completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t)
 
 (setq scroll-step 1
       scroll-margin 2)
@@ -166,7 +167,11 @@
 
 (bind-key "<escape>" 'keyboard-escape-quit)
 
-(unbind-key "C-x C-u")
+(dolist (key '("C-x C-u" "C-z"))
+  (unbind-key key))
+
+(bind-keys ("C-z" . undo)
+		   ("C-S-z" . undo-redo))
 
 (bind-keys ("M-p" . previous-buffer)
 		   ("M-n" . next-buffer))
@@ -177,11 +182,24 @@
 		   ("i" . ibuffer)
 		   ("r" . recentf-open-files))
 
+(use-package helpful
+  :bind
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-function] . helpful-function)
+  ([remap describe-key] . helpful-key)
+  ([remap describe-command] . helpful-command)
+  ("C-h c" . helpful-callable)
+  ("C-h d" . helpful-at-point))
+
 (use-package which-key
   :custom
   (which-key-min-column-description-width 20)
   :config
   (which-key-mode 1))
+
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      read-file-name-completion-ignore-case t)
 
 (use-package vertico
   :bind (:map vertico-map
@@ -204,6 +222,18 @@
 (use-package marginalia
   :init
   (marginalia-mode 1))
+
+(setq default-input-method "ukrainian-computer")
+
+;; NOTE: `google-translate' package somehow messes up with
+;; `default-input-method' variable or something like that.
+(defun toggle-im (&rest _)
+  (interactive)
+  (if current-input-method
+	  (deactivate-input-method)
+	(set-input-method (or default-input-method "ukrainian-computer"))))
+
+(bind-key [remap toggle-input-method] 'toggle-im)
 
 (use-package google-translate
   :init
