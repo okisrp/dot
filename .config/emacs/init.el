@@ -102,6 +102,11 @@
 
 (setq Man-notify-method 'pushy)
 
+(let* ((directory (expand-file-name "tmp/tramp/" user-emacs-directory))
+	   (_ (or (file-directory-p directory) (make-directory directory 'parents))))
+  (setq tramp-backup-directory-alist `(("." . ,(expand-file-name "backups/" directory)))
+		tramp-persistency-file-name (expand-file-name "tramp.el" directory)))
+
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory)))
       make-backup-file t)
 
@@ -137,9 +142,8 @@
 (when (file-exists-p custom-file)
   (load custom-file nil 'nomessage))
 
-(when-let ((directory (or (getenv "XDG_DATA_HOME")
-						  (expand-file-name ".local/share/" (getenv "HOME"))))
-		   (_ (file-directory-p directory)))
+(let ((directory (or (getenv "XDG_DATA_HOME")
+					 (expand-file-name ".local/share/" (getenv "HOME")))))
   (setq trash-directory (expand-file-name "Trash/files" directory)
 		delete-by-moving-to-trash t))
 
