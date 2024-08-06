@@ -1,4 +1,3 @@
 .config/emacs/*
 !.config/emacs/early-init.el
 !.config/emacs/init.el
-!.config/emacs/custom.el
