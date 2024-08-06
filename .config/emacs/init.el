@@ -54,7 +54,7 @@
   :custom
   (catppuccin-flavor 'latte)
   (catppuccin-highlight-matches t)
-  (catppuccin-italic-comments t)
+  (catppuccin-italic-comments nil)
   :config
   ;; Change `catppuccin-theme' when inside of a terminal.
   (unless (window-system)
@@ -104,10 +104,10 @@
 
 ;; Set default font family for `default', that's actually more than
 ;; enough, and `fixed-pitch' faces.
-(let ((font-family "Victor Mono"))
+(let ((font-family "IBM 3270"))
   (when (member font-family (font-family-list))
     (dolist (face '(default fixed-pitch))
-      (set-face-attribute face nil :font (font-spec :family font-family :size 20 :weight 'medium)))))
+      (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
 
 ;; Do not create backups and lock files.
 (setq make-backup-files nil
@@ -236,7 +236,7 @@
         google-translate-listen-program (executable-find "mplayer")
         google-translate-default-source-language "en"
         google-translate-default-target-language "uk"
-        google-translate-pop-up-buffer-set-focus t
+        google-translate-pop-up-buffer-set-focus nil
         google-translate-output-destination 'help
         google-translate-backend-method 'curl
         google-translate-show-phonetic t
