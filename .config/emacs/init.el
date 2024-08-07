@@ -104,10 +104,10 @@
 
 ;; Set default font family for `default', that's actually more than
 ;; enough, and `fixed-pitch' faces.
-(let ((font-family "IBM 3270"))
+(let ((font-family "Victor Mono"))
   (when (member font-family (font-family-list))
     (dolist (face '(default fixed-pitch))
-      (set-face-attribute face nil :font (font-spec :family font-family :size 20)))))
+      (set-face-attribute face nil :font (font-spec :family font-family :size 20 :weight 'medium)))))
 
 ;; Do not create backups and lock files.
 (setq make-backup-files nil
