@@ -108,8 +108,8 @@ test -x "$( command -v bat )" && alias cat="$( which bat )"
 test -x "$( command -v wget )" && alias wget="$( which wget ) --no-hsts"
 
 if [[ -x "$( command -v eza )" ]]; then
-	alias l="$( which eza ) -lAh --group-directories-first \
-		--no-user --time-style \"+%y/%m/%d\" --git --git-repos-no-status"
+	alias l="$( which eza ) -lA --group-directories-first \
+		--time-style \"+%y/%m/%d\" --no-user --git"
 else
 	alias l="$( which ls ) -gGAh --group-directories-first --color=auto"
 fi
