@@ -29,7 +29,7 @@ RED="^c#d20f39^"
 YLW="^c#df8e1d^"
 GRN="^c#40a02b^"
 BLU="^c#1e66f5^"
-NC="^c#cdd6f4^"
+NC="^c#a6adc8^"
 
 BT() {
 	CAP="$(cat /sys/class/power_supply/BAT0/capacity)"
