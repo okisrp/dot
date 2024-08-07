@@ -55,6 +55,6 @@ elif [[ "${UP}" = true ]]; then
 	sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
 fi
 
-if test -x "${HOME}/.scripts/status"; then
-	sh -c "${HOME}/.scripts/status -r"
+if test -x "${HOME}/.dotfiles/scripts/status"; then
+	sh -c "${HOME}/.dotfiles/scripts/status -r"
 fi

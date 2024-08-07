@@ -3,7 +3,7 @@
 {
 	sleep 4s
 	while true; do
-		xsetroot -name "$( sh -c "${HOME}/.scripts/status" )"
+		xsetroot -name "$( sh -c "${HOME}/.dotfiles/scripts/status" )"
 		sleep 1m &
 		echo -n "${!}" > "${DWM_SLEEP_PID}"
 		wait "${!}"
