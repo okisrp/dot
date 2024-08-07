@@ -1,32 +1,27 @@
 #!/usr/bin/env bash
 
-SHORTOPTS="pr"
-LONGOPTS="print,refresh"
+OPTS="$( getopt -ao "r" -l "refresh" -- "${@}" )"
 
-OPTS="$( getopt -ao "${SHORTOPTS}" -l "${LONGOPTS}" -- "${@}" )"
-
-if [[ "${?}" != 0 ]]; then
-	echo -n "Failed parsing options." >&2
-	exit 1
-fi
+[[ "${?}" != 0 ]] && exit 1
 
 eval set -- "${OPTS}"
+unset OPTS
 
-unset SHORTOPTS LONGOPTS OPTS
-
-PRINT=true
 REFRESH=false
 
 while true; do
 	case "${1}" in
-		"-p" | "--print" )
-			PRINT=true ; REFRESH=false ; shift ;;
 		"-r" | "--refresh" )
-			PRINT=false ; REFRESH=true ; shift ;;
+			REFRESH=true
+			shift
+			;;
 		"--" )
-			shift ; break ;;
+			shift
+			break
+			;;
 		* )
-			break ;;
+			break
+			;;
 	esac
 done
 
@@ -36,81 +31,66 @@ GRN="^c#40a02b^"
 BLU="^c#1e66f5^"
 NC="^c#cdd6f4^"
 
-BAT0() {
+BT() {
 	CAP="$(cat /sys/class/power_supply/BAT0/capacity)"
 	STAT="$(cat /sys/class/power_supply/BAT0/status)"
 
-	ICON="󱟤"
-	[[ "${STAT}" = "Charging" ]] && ICON="󰂄"
+	PREFIX="u"
+	[[ "${STAT}" = "Charging" ]] && PREFIX="c"
 
-	if (( "${CAP}" >= 60 )); then
-		CLR="${GRN}"
-	elif (( "${CAP}" < 60 )) && (( "${CAP}" >= 30 )); then
-		CLR="${YLW}"
+	if (( $CAP >= 60 )); then
+		PREFIX="${GRN}${PREFIX}${NC}"
+	elif (( $CAP >= 30 )); then
+		PREFIX="${YLW}${PREFIX}${NC}"
 	else
-		CLR="${RED}"
+		PREFIX="${RED}${PREFIX}${NC}"
 	fi
 
-	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${NC}" "${CAP}"
+	printf "%s %s%%" "BT" "${PREFIX}${CAP}"
 }
 
-BRIGHTNESS() {
+BR() {
 	BRT="$( calc -d "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
 	BRT="$( printf "%.0f" "$( echo "scale=2;${BRT}" | bc )" )"
 
-	if (( "${BRT}" >= 50 )); then
-		CLR="${BLU}"
-	elif (( "${BRT}" < 50 )) && (( "${BRT}" >= 20 )); then
-		CLR="${YLW}"
-	else
-		CLR="${RED}"
-	fi
-
-	printf "%s%s %s%s%%" "${CLR}" "󱠂" "${NC}" "${BRT}"
+	printf "%s %s%%" "BR" "${BRT}"
 }
 
-DATETIME() {
-	DATE="$( date '+%b %d %a' )"
-	TIME="$( date '+%R' )"
-
-	printf "%s %s" "${DATE}" "${TIME}"
-}
-
-WLAN() {
+WF() {
 	case "$( cat /sys/class/net/wl*/operstate 2> /dev/null )" in
 		"up" )
-			STAT="${BLU}󱚽 ${NC}Up" ;;
+			STAT="${BLU}up${NC}"
+			;;
 		"down" )
-			STAT="${RED}󱚼 ${NC}Dn" ;;
+			STAT="${RED}dn${NC}"
+			;;
 	esac
 
-	printf "%s" "${STAT}"
+	printf "%s %s" "WF" "${STAT}"
 }
 
-VOLUME() {
+VL() {
 	MUTE="$( pactl get-sink-mute @DEFAULT_SINK@ )"
 	VOL="$( pactl get-sink-volume @DEFAULT_SINK@ \
 		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' )"
 
-	ICON="󰕾" ; CLR="${GRN}"
+	PREFIX="u"
 	if [[ "${MUTE}" = "Mute: yes" ]]; then
-		ICON="󰖁" ; CLR="${RED}"
+		PREFIX="${RED}m${NC}"
 	elif [[ "${VOL}" = "0" ]]; then
-		CLR="${YLW}"
+		PREFIX="${YLW}${PREFIX}${NC}"
+	else
+		PREFIX="${GRN}${PREFIX}${NC}"
 	fi
 
-	printf "%s%s %s%s%%" "${CLR}" "${ICON}" "${NC}" "${VOL}"
+	test -z "${VOL}" && VOL="${YLW}-loading-${NC}" && PREFIX=""
+
+	printf "%s %s%%" "VL" "${PREFIX}${VOL}"
 }
 
-if [[ "${PRINT}" = true ]]; then
-	DL1="[ "
-	DL2=" ]"
-	printf " %s %s %s %s %s " "${DL1}$( VOLUME )${DL2}" \
-		"${DL1}$( BRIGHTNESS )${DL2}" \
-		"${DL1}$( BAT0 )${DL2}" \
-		"${DL1}$( WLAN )${DL2}" \
-		"${DL1}$( DATETIME )${DL2}"
-elif [[ "${REFRESH}" = true ]]; then
+if [[ "${REFRESH}" = false ]]; then
+	echo -n " $(VL) | $(BR) | $(BT) | $(WF) | $(date '+%b %d %a %R') "
+else
 	PID="$( cat "${DWM_SLEEP_PID}" | tr -d '\n' )"
-	test -n "${PID}" && kill -kill "${PID}"
+	test -n "${PID}" && kill -KILL "${PID}"
 fi
