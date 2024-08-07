@@ -92,7 +92,7 @@ VL() {
 }
 
 if [[ "${REFRESH}" = false ]]; then
-	echo -n " $(VL) | $(BR) | $(BT) | $(WF) | $(date '+%b %d %a %R') "
+	echo -n "${NC} $(VL) | $(BR) | $(BT) | $(WF) | $(date '+%b %d %a %R') "
 else
 	PID="$( cat "${DWM_SLEEP_PID}" | tr -d '\n' )"
 	test -n "${PID}" && kill -KILL "${PID}"
