@@ -5,6 +5,9 @@
       inhibit-splash-screen t
       inhibit-startup-screen t)
 
+;; Stop asking whether to follow symlinks or not.
+(setq vc-follow-symlinks nil)
+
 ;; Stop providing information in startup echo area message.
 (put 'inhibit-startup-echo-area-message 'saved-value t)
 (setq inhibit-startup-echo-area-message (user-login-name))
@@ -80,6 +83,9 @@
   ;; Enable visible bell.
   (setq ring-bell-function 'catppuccin-theme-visible-bell-fn
 		visible-bell t)
+  ;; Kill annoying `catppuccin-definitions' buffer.
+  (when-let ((buf (get-buffer "catppuccin-definitions.el")))
+	(kill-buffer buf))
   ;; Highlight line at point.
   (global-hl-line-mode 1)
   ;; Disable cursor blinking.

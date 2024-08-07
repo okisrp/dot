@@ -29,3 +29,9 @@
 ;; at the begining of `$DOOMDIR/init.el' file.
 ;; (add-to-list 'initial-frame-alist '(visibility . nil))
 ;; (add-hook 'window-setup-hook 'make-frame-visible)
+
+;; Move `user-emacs-directory' to cache folder. If you are trying to
+;; keep your configuration clean than that's what you really need.
+(when-let ((directory (getenv "XDG_CACHE_HOME")))
+  (setq old-user-emacs-directory user-emacs-directory
+		user-emacs-directory (expand-file-name "emacs/" directory)))
