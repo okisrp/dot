@@ -83,7 +83,10 @@ VL() {
 		PREFIX="${GRN}${PREFIX}${NC}"
 	fi
 
-	test -z "${VOL}" && VOL="${YLW}-loading-${NC}" && PREFIX=""
+	if test -z "${VOL}"; then
+		printf "%s %s" "VL" "${YLW}-loading-${NC}"
+		return
+	fi
 
 	printf "%s %s%%" "VL" "${PREFIX}${VOL}"
 }
