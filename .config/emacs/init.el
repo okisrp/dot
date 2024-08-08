@@ -5,12 +5,12 @@
       inhibit-splash-screen t
       inhibit-startup-screen t)
 
-;; Stop asking whether to follow symlinks or not.
-(setq vc-follow-symlinks nil)
-
 ;; Stop providing information in startup echo area message.
 (put 'inhibit-startup-echo-area-message 'saved-value t)
 (setq inhibit-startup-echo-area-message (user-login-name))
+
+;; Stop asking whether to follow symlinks or not.
+(setq vc-follow-symlinks nil)
 
 ;; Get the latest version of `straight.el', but it's going to be less
 ;; stable.
@@ -91,9 +91,6 @@
   ;; Disable cursor blinking.
   (blink-cursor-mode 0))
 
-;; Construct unique buffer names for files with the same base name.
-(setq uniquify-buffer-name-style 'forward)
-
 ;; Customize mode line (I don't know what is going on here).
 (setq-default mode-line-format
 			  '("%e"
@@ -115,10 +112,6 @@
     (dolist (face '(default fixed-pitch))
       (set-face-attribute face nil :font (font-spec :family font-family :size 20 :weight 'medium)))))
 
-;; Do not create backups and lock files.
-(setq make-backup-files nil
-      create-lockfiles nil)
-
 ;; Get access to recent visited files.
 (recentf-mode 1)
 
@@ -139,8 +132,9 @@
 (setq use-short-answers t)
 
 ;; Delete file to trash bin.
-(setq trash-directory (expand-file-name ".local/share/Trash/files/" (getenv "HOME"))
-	  delete-by-moving-to-trash t)
+(when-let ((dir (getenv "XDG_DATA_HOME")))
+  (setq trash-directory (expand-file-name "Trash/files/" dir)
+		delete-by-moving-to-trash t))
 
 ;; Ignore case whether it's lower or upper one.
 (setq completion-ignore-case t
@@ -172,6 +166,20 @@
 ;; Enable auto-pairing in programming and configuration modes.
 (dolist (hook '(prog-mode-hook conf-mode-hook))
   (add-hook hook 'electric-pair-local-mode))
+
+;; Construct unique buffer names for files with the same base name.
+(setq uniquify-buffer-name-style 'forward)
+
+;; Ignore buffers that start with asterisk when switching between them.
+(setq switch-to-prev-buffer-skip-regexp "\*[^*]+\*")
+
+;; Specify how should buffers behave.
+(setq display-buffer-alist
+      '(("\\*[Hh]elp*" (display-buffer-same-window))
+		("\\*Occur\\*" (display-buffer-same-window))))
+
+;; Open `Man' buffers in the same window.
+(setq Man-notify-method 'pushy)
 
 ;; Replace `help' buffer for `helpful'.
 (use-package helpful
@@ -276,27 +284,25 @@
 (bind-keys ("C-z" . undo)
 		   ("C-S-z" . undo-redo))
 
-;; Ignore buffers that start with asterisk when switching between them.
-(setq switch-to-prev-buffer-skip-regexp "\*[^*]+\*")
-
 ;; Make moving around buffer more faster.
 (bind-keys ("M-p" . previous-buffer)
 		   ("M-n" . next-buffer))
-
-(use-package consult)
 
 ;; Make something similar to leader key.
 (bind-keys :prefix "M-SPC"
 		   :prefix-map M-SPC-prefix-map
 		   ("k" . kill-current-buffer)
 		   ("i" . ibuffer)
-		   ("r" . recentf-open-files)
-		   ("l" . consult-line)
-		   ("d" . consult-ripgrep)
-		   ("o" . consult-line-multi)
-		   ("f" . consult-find))
+		   ("r" . recentf-open-files))
+
+(use-package consult
+  :bind
+  ("M-s l" . consult-line)
+  ("M-s r" . consult-ripgrep)
+  ("M-s m" . consult-line-multi)
+  ("M-s f" . consult-find))
 
 ;; Do not use user interface to configure, but if you do then:
-(setq custom-file (locate-user-emacs-file "custom.el"))
+(setq custom-file (expand-file-name "custom.el" old-user-emacs-dir))
 (when (file-exists-p custom-file)
   (load custom-file 'noerror 'nomessage))
