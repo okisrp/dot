@@ -50,7 +50,7 @@ BLU='\[\033[00;34m\]'
 PUR='\[\033[00;35m\]'
 
 if ! grep -q "/dev/tty" <<< "$( tty )"; then
-	PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$ ${NC}"
+	PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$> ${NC}"
 	export PS1
 fi
 
