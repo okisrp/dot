@@ -45,10 +45,11 @@ cowsay
 mlocate
 pkgfile
 
-gptfdisk
+exfatprogs
 ntfs-3g
 mtools
 dosfstools
+gptfdisk
 udisks2
 
 networkmanager
