@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+#/	The title of the script
+#/
+#/	DESCRIPTION:
+#/		Descript what the script does in detail.
+#/
+#/	USAGE:
+#/		install [--help]
+#/
+#/	SYNOPSIS:
+#/		--help:
+#/			Display help message.
+
+set -euo pipefail
+
+trap 'echo "Script failed at line $LINENO"' ERR
+
+LOGFILE=install.log
+
+log() {
+	case $1 in
+		ERROR|error)
+			shift
+			printf "\033[31m[!] ERROR:::\033[0m %b\n" "$@"
+			;;
+		INFO|info)
+			shift
+			printf "\033[34m[+] INFO:::\033[0m %b\n" "$@"
+			;;
+		WARN|warn)
+			shift
+			printf "\033[33m[!] WARN:::\033[0m %b\n" "$@"
+			;;
+		*)
+			printf "\033[34m[+] INFO:::\033[0m %b\n" "$@"
+			;;
+	esac
+}
+
+OPTS=$(getopt -ao 'h' -l 'help' -- "$@")
+
+if [[ $? -ne 0 ]]; then
+	log ERROR 'Terminating…' >&2
+	exit 1
+fi
+
+eval set -- "$OPTS"
+unset OPTS
+
+while true; do
+	case $1 in
+		-h|--help)
+			grep '^#/' < "$0" | cut -c 4- | less +g
+			exit 0
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			log ERROR "Unknown parameter passed: $1" >&2
+			exit 1
+			;;
+	esac
+done
+
+if test -t 0; then
+	log WARN 'Before running the script look at: its internals or run it with -h option (Better to do both.)'
+	read -rp "Do you want to proceed? [y/N] " RESPONSE
+
+	if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+		log INFO 'You have consented to it by yourself.'
+	else
+		log ERROR "The script won't do without your permission." >&2
+		exit 126
+	fi
+else
+	log ERROR "You have to launch the script interactively." >> $LOGFILE
+	exit 1
+fi
