@@ -18,19 +18,19 @@ export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 if type -P st &> /dev/null; then
-	TERMINAL="$(type -P st)"
+	TERMINAL="st"
 	export TERMINAL
 fi
 
 if type -P firefox &> /dev/null; then
-	BROWSER="$(type -P firefox)"
+	BROWSER="firefox"
 	export BROWSER
 fi
 
 if type -P nvim &> /dev/null; then
-	EDITOR="$(type -P nvim)"
-	export MANPAGER="$EDITOR +Man!"
-	test -t 0 && alias e="$EDITOR"
+	EDITOR="nvim"
+	export MANPAGER="nvim +Man!"
+	test -t 0 && alias e="nvim"
 	export EDITOR
 fi
 
@@ -40,17 +40,15 @@ test -t 0 || return
 
 NC='\[\033[00m\]'
 RED='\[\033[00;31m\]'
-GRN='\[\033[00;32m\]'
 YLW='\[\033[00;33m\]'
 BLU='\[\033[00;34m\]'
-PUR='\[\033[00;35m\]'
 
-if ! grep -q "/dev/tty" <<< "$( tty )"; then
+if ! grep -q "/dev/tty" <<< "$(tty)"; then
 	PS1="${BLU}\u ${YLW}\w ${RED}&> ${NC}"
 	export PS1
 fi
 
-unset NC RED GRN YLW BLU PUR
+unset NC RED YLW BLU
 
 if [[ "$(tty)" != "/dev/tty1" ]]; then
 	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
@@ -101,21 +99,20 @@ alias cal="$(type -P cal) -m"
 
 if test type -P bat &> /dev/null; then
 	if test -f "${XDG_CONFIG_HOME}/bat/config"; then
-		alias cat="$(type -P bat)"
+		alias cat="bat"
 	else
-		alias cat="$(type -P bat) -p"
+		alias cat="bat -p"
 	fi
 fi
 
 type -P wget &> /dev/null && alias wget="$(type -P wget) --no-hsts"
 
 if type -P eza &> /dev/null; then
-	alias l="$(type -P eza) -lA --group-directories-first \
-		--time-style \"+%y/%m/%d\" --no-user --git"
+	alias l="eza -lA --group-directories-first --time-style \"+%y/%m/%d\" --no-user --git"
 else
-	alias l="$(type -P ls) -gGAh --group-directories-first --color=auto"
+	alias l="ls -gGAh --group-directories-first --color=auto"
 fi
 
 if type -P zoxide &> /dev/null; then
-	eval "$( zoxide init bash )"
+	eval "$(zoxide init bash)"
 fi

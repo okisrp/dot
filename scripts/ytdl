@@ -8,6 +8,6 @@ DIR=${XDG_MUSIC_DIR:-$HOME/mc/}
 [[ "$URL" != *https*youtube*watch* ]] && exit 1
 
 yt-dlp --extract-audio --audio-format 'opus' --audio-quality 0 \
-       --no-playlist --paths "$DIR" "$URL"
+	--no-playlist --paths "$DIR" "$URL"
 
 exit 0
