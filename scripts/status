@@ -31,6 +31,11 @@ GRN='^c#40a02b^'
 NC='^c#cdd6f4^'
 
 bt() {
+	if ! command -v acpi &> /dev/null; then
+		printf "%s%d%s" "BT $RED-" 127 "-$NC"
+		return
+	fi
+
 	CAP=$(acpi | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')
 
 	PRE="u"
@@ -48,6 +53,11 @@ bt() {
 }
 
 brt() {
+	if ! command -v brightnessctl &> /dev/null || ! command -v calc &> /dev/null; then
+		printf "%s%d%s" "BR $RED-" 127 "-$NC"
+		return
+	fi
+
 	BRT=$(calc -d "100 * $(brightnessctl get) / $(brightnessctl max)")
 
 	printf "BR %.0f%%" "$BRT"
@@ -68,6 +78,11 @@ net() {
 }
 
 vol() {
+	if ! command -v pactl &> /dev/null; then
+		printf "%s%d%s" "VL $RED-" 127 "-$NC"
+		return
+	fi
+
 	MUTE=$(pactl get-sink-mute 0)
 	VOL=$(pactl get-sink-volume 0 | grep -i 'volume' | awk '{print $5}')
 
@@ -89,7 +104,7 @@ vol() {
 }
 
 if [[ $REFRESH == false ]]; then
-	echo -n "$NC $(vol) | $(brt) | $(bt) | $(net) | $(date '+%b %d %a %R ')"
+	echo -n "$NC $(vol) | $(brt) | $(bt) | $(net) | $(date '+%b %d %a %R ')" | tr -d '\n'
 else
 	PID=$(tr -d '\n' < "$DWM_SLEEP_PID")
 	test -n "$PID" && kill -9 "$PID"
