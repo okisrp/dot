@@ -17,9 +17,9 @@ brightnessctl
 playerctl
 openssh
 calc
-bc
-sx
+acpi
 xautolock
+sx
 
 xorg-server
 xorg-xinit
