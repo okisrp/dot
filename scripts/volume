@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 
-OPTS="$( getopt --options "udml:s:" \
-	--longoptions "up,down,mute,level:,set:" \
-	--alternative -- "${@}" )"
+OPTS=$(getopt -ao 'udml:s:' -l 'up,down,mute,level:,set:' -- "$@" )
 
-if [[ "${?}" != 0 ]]; then
-	echo "Failed parsing options." >&2
-	exit 1
-fi
+[[ $? != 0 ]] && exit 1
 
-eval set -- "${OPTS}"
+eval set -- "$OPTS"
 unset OPTS
 
 UP=true
@@ -19,42 +14,57 @@ LEVEL=4
 SET=0
 
 while true; do
-	case "${1}" in
-		"-u" | "--up" )
-			UP=true && DOWN=false ; shift ;;
-		"-d" | "--down" )
-			DOWN=true && UP=false ; shift ;;
-		"-m" | "--mute" )
-			MUTE=true ; shift ;;
-		"-l" | "--level" )
-			LEVEL="${2}" ; shift 2 ;;
-		"-s" | "--set" )
-			SET="${2}" ; shift 2 ;;
-		"--" )
-			shift ; break ;;
-		* )
-			break ;;
+	case $1 in
+		-u|--up)
+			UP=true
+			DOWN=false
+			shift
+			;;
+		-d|--down)
+			DOWN=true
+			UP=false
+			shift
+			;;
+		-m|--mute)
+			MUTE=true
+			shift
+			;;
+		-l|--level)
+			LEVEL=$2
+			shift 2
+			;;
+		-s|--set)
+			SET=$2
+			shift 2
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			exit 1
+			;;
 	esac
 done
 
-[[ -x "$( command -v pactl )" ]] || exit 1
+command -v pactl &> /dev/null || exit 127
 
-CMD="$( which pactl )"
-
-UNMUTE() {
-	sh -c "${CMD} set-sink-mute 0 0"
+unmute() {
+	pactl set-sink-mute 0 0
 }
 
-if (( "${SET}" != 0 )); then
-	sh -c "${CMD} set-sink-volume 0 ${SET}%" && UNMUTE
-elif [[ "${MUTE}" = true ]]; then
-	sh -c "${CMD} set-sink-mute 0 toggle"
-elif [[ "${DOWN}" = true ]]; then
-	sh -c "${CMD} set-sink-volume 0 -${LEVEL}%" && UNMUTE
-elif [[ "${UP}" = true ]]; then
-	sh -c "${CMD} set-sink-volume 0 +${LEVEL}%" && UNMUTE
+if [[ ! $SET -eq 0 ]]; then
+	pactl set-sink-volume 0 "$SET%" && unmute
+elif [[ $MUTE == true ]]; then
+	pactl set-sink-mute 0 toggle
+elif [[ $DOWN == true ]]; then
+	pactl set-sink-volume 0 "-$LEVEL%" && unmute
+elif [[ $UP == true ]]; then
+	pactl set-sink-volume 0 "+$LEVEL%" && unmute
 fi
 
-if test -x "${HOME}/.dotfiles/scripts/status"; then
-	sh -c "${HOME}/.dotfiles/scripts/status -r"
+if test -x "$HOME/.dotfiles/scripts/status"; then
+	sh -c "$HOME/.dotfiles/scripts/status -r"
 fi
+
+exit 0
