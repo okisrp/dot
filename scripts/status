@@ -1,58 +1,58 @@
 #!/usr/bin/env bash
 
-OPTS="$( getopt -ao "r" -l "refresh" -- "${@}" )"
+OPTS=$(getopt -ao 'r' -l 'refresh' -- "$@")
 
-[[ "${?}" != 0 ]] && exit 1
+[[ $? != 0 ]] && exit 1
 
-eval set -- "${OPTS}"
+eval set -- "$OPTS"
 unset OPTS
 
 REFRESH=false
 
 while true; do
 	case "${1}" in
-		"-r" | "--refresh" )
+		-r|--refresh)
 			REFRESH=true
 			shift
 			;;
-		"--" )
+		--)
 			shift
 			break
 			;;
-		* )
+		*)
 			break
 			;;
 	esac
 done
 
-RED="^c#d20f39^"
-YLW="^c#df8e1d^"
-GRN="^c#40a02b^"
-NC="^c#cdd6f4^"
+RED='^c#d20f39^'
+YLW='^c#df8e1d^'
+GRN='^c#40a02b^'
+NC='^c#cdd6f4^'
 
 bt() {
-	CAP="$(cat /sys/class/power_supply/BAT0/capacity)"
-	STAT="$(cat /sys/class/power_supply/BAT0/status)"
+	CAP=$(cat /sys/class/power_supply/BAT0/capacity)
+	ST=$(cat /sys/class/power_supply/BAT0/status)
 
-	PREFIX="u"
-	[[ "${STAT}" = "Charging" ]] && PREFIX="c"
+	PRE="u"
+	[[ "$ST" = "Charging" ]] && PRE="c"
 
-	if (( $CAP >= 60 )); then
-		PREFIX="${GRN}${PREFIX}${NC}"
-	elif (( $CAP >= 30 )); then
-		PREFIX="${YLW}${PREFIX}${NC}"
+	if [[ $CAP -ge 50 ]]; then
+		PRE="$GRN$PRE$NC"
+	elif [[ $CAP -ge 30 ]]; then
+		PRE="$YLW$PRE$NC"
 	else
-		PREFIX="${RED}${PREFIX}${NC}"
+		PRE="$RED$PRE$NC"
 	fi
 
-	printf "%s %s%%" "BT" "${PREFIX}${CAP}"
+	printf "%s" "BT $PRE$CAP%"
 }
 
 brt() {
-	BRT="$( calc -d "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
-	BRT="$( printf "%.0f" "$( echo "scale=2;${BRT}" | bc )" )"
+	BRT=$(calc -d "100 * $(brightnessctl get) / $(brightnessctl max)")
+	BRT=$(printf "%.0f" "$(echo "scale=2;${BRT}" | bc)")
 
-	printf "%s %s%%" "BR" "${BRT}"
+	printf "%s" "BR $BRT%"
 }
 
 net() {
@@ -72,30 +72,30 @@ net() {
 }
 
 vol() {
-	MUTE="$( pactl get-sink-mute @DEFAULT_SINK@ )"
-	VOL="$( pactl get-sink-volume @DEFAULT_SINK@ \
-		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' )"
+	MUTE=$(pactl get-sink-mute @DEFAULT_SINK@)
+	VOL=$(pactl get-sink-volume @DEFAULT_SINK@ \
+		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' )
 
-	PREFIX="u"
-	if [[ "${MUTE}" = "Mute: yes" ]]; then
-		PREFIX="${RED}m${NC}"
-	elif [[ "${VOL}" = "0" ]]; then
-		PREFIX="${YLW}${PREFIX}${NC}"
+	PRE="u"
+	if [[ "$MUTE" == *yes* ]]; then
+		PRE="${RED}m$NC"
+	elif [[ $VOL -eq 0 ]]; then
+		PRE="$YLW$PRE$NC"
 	else
-		PREFIX="${GRN}${PREFIX}${NC}"
+		PRE="$GRN$PRE$NC"
 	fi
 
-	if test -z "${VOL}"; then
-		printf "%s %s" "VL" "${YLW}-loading-${NC}"
+	if test -z "$VOL"; then
+		printf "%s" "VL $YLW-loading-$NC"
 		return
 	fi
 
-	printf "%s %s%%" "VL" "${PREFIX}${VOL}"
+	printf "%s" "VL $PRE$VOL%"
 }
 
-if [[ "${REFRESH}" = false ]]; then
-	echo -n "${NC} $(vol) | $(brt) | $(bt) | $(net) | $(date '+%b %d %a %R') "
+if [[ $REFRESH == false ]]; then
+	echo -n "$NC $(vol) | $(brt) | $(bt) | $(net) | $(date '+%b %d %a %R ')"
 else
-	PID="$( cat "${DWM_SLEEP_PID}" | tr -d '\n' )"
-	test -n "${PID}" && kill -KILL "${PID}"
+	PID=$(tr -d '\n' < "$DWM_SLEEP_PID")
+	test -n "$PID" && kill -9 "$PID"
 fi
