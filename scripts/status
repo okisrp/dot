@@ -28,7 +28,6 @@ done
 RED="^c#d20f39^"
 YLW="^c#df8e1d^"
 GRN="^c#40a02b^"
-BLU="^c#1e66f5^"
 NC="^c#cdd6f4^"
 
 bt() {
@@ -64,12 +63,12 @@ net() {
 	if [[ "$NET" == *enp* ]]; then
 		ST="$YLW-cable-$NC"
 	elif [[ "$NET" == *wl* ]]; then
-		ST="$BLU-wifi-$NC"
+		ST="$YLW-wl-$NC"
 	else
 		ST="$RED-down-$NC"
 	fi
 
-	echo -n "NET $ST"
+	printf "%s" "NET $ST"
 }
 
 vol() {
