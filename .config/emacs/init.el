@@ -9,6 +9,13 @@
 (put 'inhibit-startup-echo-area-message 'saved-value t)
 (setq inhibit-startup-echo-area-message (user-login-name))
 
+;; Delete comments from scratch buffer.
+(setq initial-scratch-message nil)
+
+;; Set simple text alike mode in scratch buffer instead of
+;; `lisp-interaction-mode'.
+(setq initial-major-mode 'fundamental-mode)
+
 ;; Stop asking whether to follow symlinks or not.
 (setq vc-follow-symlinks nil)
 
