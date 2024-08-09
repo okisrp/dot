@@ -31,7 +31,7 @@ GRN="^c#40a02b^"
 BLU="^c#1e66f5^"
 NC="^c#cdd6f4^"
 
-BT() {
+bt() {
 	CAP="$(cat /sys/class/power_supply/BAT0/capacity)"
 	STAT="$(cat /sys/class/power_supply/BAT0/status)"
 
@@ -49,27 +49,30 @@ BT() {
 	printf "%s %s%%" "BT" "${PREFIX}${CAP}"
 }
 
-BR() {
+brt() {
 	BRT="$( calc -d "100 * $( brightnessctl get ) / $( brightnessctl max )" )"
 	BRT="$( printf "%.0f" "$( echo "scale=2;${BRT}" | bc )" )"
 
 	printf "%s %s%%" "BR" "${BRT}"
 }
 
-WF() {
-	case "$( cat /sys/class/net/wl*/operstate 2> /dev/null )" in
-		"up" )
-			STAT="${BLU}up${NC}"
-			;;
-		"down" )
-			STAT="${RED}dn${NC}"
-			;;
-	esac
+net() {
+	NET=$(ip -brief address | \
+		grep -E '^(wl|enp).*(UP|UNKNOWN)[[:blank:]][[:digit:]]{0,9}' | \
+		awk '{print $1}')
 
-	printf "%s %s" "WF" "${STAT}"
+	if [[ "$NET" == *enp* ]]; then
+		ST="$YLW-cable-$NC"
+	elif [[ "$NET" == *wl* ]]; then
+		ST="$BLU-wifi-$NC"
+	else
+		ST="$RED-down-$NC"
+	fi
+
+	echo -n "NET $ST"
 }
 
-VL() {
+vol() {
 	MUTE="$( pactl get-sink-mute @DEFAULT_SINK@ )"
 	VOL="$( pactl get-sink-volume @DEFAULT_SINK@ \
 		| grep "Volume:" | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' )"
@@ -92,7 +95,7 @@ VL() {
 }
 
 if [[ "${REFRESH}" = false ]]; then
-	echo -n "${NC} $(VL) | $(BR) | $(BT) | $(WF) | $(date '+%b %d %a %R') "
+	echo -n "${NC} $(vol) | $(brt) | $(bt) | $(net) | $(date '+%b %d %a %R') "
 else
 	PID="$( cat "${DWM_SLEEP_PID}" | tr -d '\n' )"
 	test -n "${PID}" && kill -KILL "${PID}"
