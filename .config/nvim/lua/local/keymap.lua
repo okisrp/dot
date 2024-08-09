@@ -19,4 +19,6 @@ map("v", ">", ">gv")
 
 map("nv", "<Space>", "<Nop>")
 
-map("nvic", "<M-c>", "<Esc>")
+map("nvic", "<C-g>", "<Esc>")
+
+map("nv", "G", "G<C-f>k<C-e>")
