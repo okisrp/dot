@@ -15,6 +15,8 @@
 set -euo pipefail
 
 trap 'echo "Script failed at line $LINENO"' ERR
+trap 'echo "
+Interapt signal received" && exit 2' SIGINT
 
 LOGFILE=install.log
 
