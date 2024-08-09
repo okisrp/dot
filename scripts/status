@@ -57,7 +57,7 @@ brt() {
 
 net() {
 	NET=$(ip -brief address | \
-		grep -E '^(wl|enp).*(UP|UNKNOWN)[[:blank:]][[:digit:]]{0,9}' | \
+		grep -E '^(wl|enp).*(UP|UNKNOWN).*d+' | \
 		awk '{print $1}')
 
 	if [[ "$NET" == *enp* ]]; then
