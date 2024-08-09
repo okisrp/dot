@@ -1,7 +1,3 @@
-if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin:$PATH"
-fi
-
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
 export MPLAYER_HOME="${XDG_CONFIG_HOME}/mplayer"
 export W3M_DIR="${XDG_DATA_HOME}/w3m"
@@ -21,26 +17,26 @@ export FZF_DEFAULT_OPTS="--bind=alt-j:down,alt-k:up \
 	--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 	--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
-if [[ -x "$( command -v st )" ]]; then
-	TERMINAL="$( which st )"
+if type -P st &> /dev/null; then
+	TERMINAL="$(type -P st)"
 	export TERMINAL
 fi
 
 if type -P firefox &> /dev/null; then
-	BROWSER="$( type -P firefox )"
+	BROWSER="$(type -P firefox)"
 	export BROWSER
 fi
 
 if type -P nvim &> /dev/null; then
-	EDITOR="$( which nvim )"
-	export MANPAGER="${EDITOR} +Man!"
-	test -t 0 && alias e="${EDITOR}"
+	EDITOR="$(type -P nvim)"
+	export MANPAGER="$EDITOR +Man!"
+	test -t 0 && alias e="$EDITOR"
 	export EDITOR
 fi
 
-[[ ! -t 0 ]] && return
+test -t 0 || return
 
-[[ "${DISPLAY}" ]] && shopt -s checkwinsize
+[[ "$DISPLAY" ]] && shopt -s checkwinsize
 
 NC='\[\033[00m\]'
 RED='\[\033[00;31m\]'
@@ -50,13 +46,13 @@ BLU='\[\033[00;34m\]'
 PUR='\[\033[00;35m\]'
 
 if ! grep -q "/dev/tty" <<< "$( tty )"; then
-	PS1="${PUR}\u${RED}@${BLU}\h ${YLW}\w ${RED}\$> ${NC}"
+	PS1="${BLU}\u ${YLW}\w ${RED}&> ${NC}"
 	export PS1
 fi
 
 unset NC RED GRN YLW BLU PUR
 
-if [[ "$( tty )" != "/dev/tty1" ]]; then
+if [[ "$(tty)" != "/dev/tty1" ]]; then
 	if type -P fortune &> /dev/null && type -P cowsay &> /dev/null; then
 		fortune -s | tr -d '\t' | cowsay -f bud-frogs
 	fi
@@ -83,37 +79,43 @@ if [[ -e "/usr/share/bash-completion/bash_completion" ]]; then
 	source "/usr/share/bash-completion/bash_completion"
 fi
 
-if [[ -x "$( command -v dircolors )" ]]; then
+if command -v dircolors &> /dev/null; then
 	if [[ ! -e "${XDG_CONFIG_HOME}/dircolors" ]]; then
 		dircolors -p > "${XDG_CONFIG_HOME}/dircolors"
 	fi
-	eval "$( dircolors -b "${XDG_CONFIG_HOME}/dircolors" )"
+	eval "$(dircolors -b "${XDG_CONFIG_HOME}/dircolors")"
 fi
 
-alias mv="$( which mv ) -i"
-alias cp="$( which cp ) -i"
+alias mv="$(type -P mv) -i"
+alias cp="$(type -P cp) -i"
 
-alias du="$( which du ) -h"
-alias df="$( which df ) -h"
-alias free="$( which free ) -m"
+alias du="$(type -P du) -h"
+alias df="$(type -P df) -h"
+alias free="$(type -P free) -m"
 
-alias grep="$( which grep ) --color=auto"
-alias egrep="$( which grep ) --color=auto -E"
-alias ip="$( which ip ) -color=auto"
+alias grep="$(type -P grep) -i --color=auto"
+alias egrep="$(type -P grep) -E --color=auto"
+alias ip="$(type -P ip) -color=auto"
 
-alias cal="$( which cal ) -m"
+alias cal="$(type -P cal) -m"
 
-test -x "$( command -v bat )" && alias cat="$( which bat )"
+if test type -P bat &> /dev/null; then
+	if test -f "${XDG_CONFIG_HOME}/bat/config"; then
+		alias cat="$(type -P bat)"
+	else
+		alias cat="$(type -P bat) -p"
+	fi
+fi
 
-test -x "$( command -v wget )" && alias wget="$( which wget ) --no-hsts"
+type -P wget &> /dev/null && alias wget="$(type -P wget) --no-hsts"
 
-if [[ -x "$( command -v eza )" ]]; then
-	alias l="$( which eza ) -lA --group-directories-first \
+if type -P eza &> /dev/null; then
+	alias l="$(type -P eza) -lA --group-directories-first \
 		--time-style \"+%y/%m/%d\" --no-user --git"
 else
-	alias l="$( which ls ) -gGAh --group-directories-first --color=auto"
+	alias l="$(type -P ls) -gGAh --group-directories-first --color=auto"
 fi
 
-if [[ -x "$( command -v zoxide )" ]]; then
+if type -P zoxide &> /dev/null; then
 	eval "$( zoxide init bash )"
 fi
