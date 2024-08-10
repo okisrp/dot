@@ -3,10 +3,10 @@
 {
 	sleep 4s
 	while true; do
-		xsetroot -name "$( sh -c "${HOME}/.dotfiles/scripts/status" )"
+		xsetroot -name "$("$DF_SCRIPTS_DIR"/status)"
 		sleep 1m &
-		echo -n "${!}" > "${DWM_SLEEP_PID}"
-		wait "${!}"
+		echo "$!" > "$DWM_SLEEP_PID"
+		wait $!
 	done
 } &
 
@@ -20,16 +20,16 @@ xset r rate 350 55 &
 
 setxkbmap -layout "us,ua" -option "grp:shifts_toggle" &
 
-if [ -f "${XDG_CONFIG_HOME}/sxhkd/sxhkdrc" ]; then
-	sxhkd -c "${XDG_CONFIG_HOME}/sxhkd/sxhkdrc"
+if [ -f "$XDG_CONFIG_HOME/sxhkd/sxhkdrc" ]; then
+	sxhkd -c "$XDG_CONFIG_HOME/sxhkd/sxhkdrc"
 fi &
 
 xinput set-prop "Synaptics TM3336-001" "libinput Tapping Enabled" 1 &
 
 unclutter --exclude-root --timeout 5 &
 
-if [ -e "${XDG_DATA_HOME}/wallpapers/default" ]; then
-	feh --no-fehbg --bg-scale "${XDG_DATA_HOME}/wallpapers/default"
+if [ -e "$XDG_DATA_HOME/wallpapers/default" ]; then
+	feh --no-fehbg --bg-scale "$XDG_DATA_HOME/wallpapers/default"
 fi &
 
 exec dwm

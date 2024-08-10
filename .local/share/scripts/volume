@@ -63,8 +63,8 @@ elif [[ $UP == true ]]; then
 	pactl set-sink-volume 0 "+$LEVEL%" && unmute
 fi
 
-if test -x "$HOME/.dotfiles/scripts/status"; then
-	sh -c "$HOME/.dotfiles/scripts/status -r"
+if test -x "$DF_SCRIPTS_DIR"/status; then
+	"$DF_SCRIPTS_DIR"/status -r
 fi
 
 exit 0

@@ -45,15 +45,15 @@ done
 command -v brightnessctl &> /dev/null || exit 127
 
 if [[ ! $SET -eq 0 ]]; then
-	brightnessctl --quiet set "$SET%"
+	brightnessctl -q set "$SET%"
 elif [[ $UP == true ]]; then
-	brightnessctl --quiet set "+$LEVEL%"
+	brightnessctl -q set "+$LEVEL%"
 elif [[ $DOWN == true ]]; then
-	brightnessctl --quiet set "$LEVEL-%"
+	brightnessctl -q set "$LEVEL-%"
 fi
 
-if test -x "$HOME/.dotfiles/scripts/status"; then
-	sh -c "$HOME/.dotfiles/scripts/status -r"
+if test -x "$DF_SCRIPTS_DIR/status"; then
+	"$DF_SCRIPTS_DIR"/status -r
 fi
 
 exit 0
