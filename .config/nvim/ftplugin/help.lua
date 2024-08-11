@@ -1,1 +1,1 @@
-vim.keymap.set("n", "q", vim.cmd.bdelete, { buffer = true })
+vim.keymap.set("n", "q", vim.cmd.helpclose, { buffer = true })

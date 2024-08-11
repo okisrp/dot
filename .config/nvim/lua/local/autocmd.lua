@@ -1,12 +1,14 @@
--- Save cursor position on exit.
+-- Save cursor position on buffer closing.
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*",
 	callback = function()
-		vim.cmd [[ if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif ]]
+		if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
+			vim.cmd("normal! g`\"")
+		end
 	end,
 })
 
--- Remove extra whitespaces at the end of lines.
+-- Delete extra spaces at the end of lines when saving buffer.
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
 	callback = function()
@@ -24,9 +26,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
--- Open help buffer as whole window.
+-- Open git commit message buffer in insert mode at the beginning of first line.
 vim.api.nvim_create_autocmd("FileType", {
-	pattern = "help",
-	group = vim.api.nvim_create_augroup("HelpBuf", { clear = true }),
-	command = "only",
+	pattern = "gitcommit",
+	callback = function()
+		vim.cmd.normal("gg0")
+		vim.cmd("startinsert")
+	end,
 })

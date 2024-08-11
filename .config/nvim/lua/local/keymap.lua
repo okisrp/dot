@@ -1,5 +1,5 @@
 local function map(mode, lhs, rhs, opts)
-	local opts, t = opts or { noremap = true }, {}
+	local opts, t = opts or { noremap = true, silent = true }, {}
 	mode:gsub(".", function(c) table.insert(t, c) end)
 	vim.keymap.set(t, lhs, rhs, opts)
 end
