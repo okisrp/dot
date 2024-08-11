@@ -13,11 +13,6 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("local.autocmd")
-
-require("local.option")
-require("local.keymap")
-
 require("lazy").setup("plugin", {
 	lockfile = vim.fn.stdpath("cache") .. "/lazy/lock.json",
 	defaults = {
