@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+#/	Install suckless tools
+#/
+#/	DESCRIPTION:
+#/		Install specified suckless tools and utilities
+#/
+#/	USAGE:
+#/		install [-h|--help] [-t|--tools] [-d|--dir]
+#/
+#/	SYNOPSIS:
+#/		-h, --help:
+#/			Display help message.
+#/		-t tools, --tools=tools:
+#/			Specify suckless tools list with comma separated string (default: dwm,dmenu)
+#/		-d directory, --dir=directory:
+#/			Specify suckless tools directory (default: $XDG_DATA_HOME/sltools|$HOME/.local/share/sltools)
+#/
+#/	RECOMMANDATION:
+#/		Do not use a lot of patches select few of them, especially for dwm.
+
+set -euo pipefail
+
+trap 'log ERROR "Script failed at line $LINENO"' ERR
+
+trap 'echo && log ERROR "Interapt signal received" && exit 130' SIGINT
+
+log() {
+	local RED='\033[01;31m'
+	local YLW='\033[01;33m'
+	local BLU='\033[01;34m'
+	local NC='\033[00m'
+
+	case $1 in
+		ERROR|error)
+			shift
+			printf "$RED[!] ERROR:::$NC %b\n" "$@"
+			;;
+		INFO|info)
+			shift
+			printf "$BLU[+] INFO:::$NC %b\n" "$@"
+			;;
+		WARN|warn)
+			shift
+			printf "$YLW[!] WARN:::$NC %b\n" "$@"
+			;;
+		*)
+			printf "$BLU[+] INFO:::$NC %b\n" "$@"
+			;;
+	esac
+}
+
+OPTS=$(getopt -ao 'ht:d:' -l 'help,tools:,dir:' -- "$@")
+
+if [[ $? -ne 0 ]]; then
+	log ERROR 'Terminating…' >&2
+	exit 1
+fi
+
+eval set -- "$OPTS"
+unset OPTS
+
+TOOLS=(
+	"dwm"
+	"dmenu"
+)
+
+TOOLS_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/sltools
+
+while true; do
+	case $1 in
+		-h|--help)
+			grep '^#/' < "$0" | cut -c 4- | less +g
+			exit 0
+			;;
+		-t|--tools)
+			IFS=',' read -ra TOOLS <<< "$2"
+			shift 2
+			;;
+		-d|--dir)
+			TOOLS_DIR=$2
+			shift 2
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			log ERROR "Unknown parameter passed: $1" >&2
+			exit 1
+			;;
+	esac
+done
+
+if [[ ${#TOOLS[@]} -eq 0 ]]; then
+	log ERROR "You must to pass some suckless tools' names" >&2
+	exit 2
+fi
+
+if test -t 0; then
+	log WARN 'Before running the script look at: its internals or run it with -h option (Better to do both)'
+	read -rp "Do you want to proceed? [y/N] " RESPONSE
+
+	if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+		log WARN 'The script will proceed than'
+	else
+		log ERROR "The script won't do without your permission" >&2
+		exit 126
+	fi
+else
+	log ERROR "You have to launch the script interactively" >&2
+	exit 1
+fi
+
+if [[ -d "$TOOLS_DIR" ]]; then
+	log WARN "The directory $TOOLS_DIR already exists"
+	read -rp "Do you want to delete it? [y/N] " RESPONSE
+
+	if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+		log INFO 'The directory is deleted and re-created empty'
+		rm -rf "$TOOLS_DIR"
+		mkdir -p "$TOOLS_DIR"
+	else
+		log ERROR "Make a backup for specified directory and/or move it (or delete it by yourself)" >&2
+		exit 126
+	fi
+else
+	log INFO 'The directory is created'
+	mkdir -p "$TOOLS_DIR"
+fi
+
+if ! command -v git &> /dev/null; then
+	log ERROR "Can't proceed without git. Install it and re-run the script" >&2
+	exit 127
+else
+	for TOOL in "${TOOLS[@]}"; do
+		git clone --depth 1 https://git.suckless.org/"$TOOL"
+	done
+fi
+
+exit 0
