@@ -34,3 +34,15 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.cmd("startinsert")
 	end,
 })
+
+-- Close help buffer/window by pressing q key.
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "help",
+	callback = function()
+		if vim.cmd("execute winnr()") == vim.cmd("execute winnr('$')") then
+			vim.keymap.set("n", "q", vim.cmd.bdelete, { buffer = true })
+			return
+		end
+		vim.keymap.set("n", "q", vim.cmd.helpclose, { buffer = true })
+	end,
+})
