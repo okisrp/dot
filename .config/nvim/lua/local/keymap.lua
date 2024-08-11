@@ -11,9 +11,6 @@ map("n", "<M-e>", vim.cmd.bdelete)
 map("n", "<M-k>", vim.cmd.bprevious)
 map("n", "<M-j>", vim.cmd.bnext)
 
-map("c", "<M-k>", "<Up>")
-map("c", "<M-j>", "<Down>")
-
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 

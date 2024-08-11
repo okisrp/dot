@@ -1,4 +1,3 @@
--- Save cursor position on buffer closing.
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*",
 	callback = function()
@@ -8,7 +7,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
--- Delete extra spaces at the end of lines when saving buffer.
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
 	callback = function()
@@ -18,15 +16,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
--- Highlight yanked text.
 vim.api.nvim_create_autocmd("TextYankPost", {
 	pattern = "*",
 	callback = function()
-		vim.highlight.on_yank({ higroup = "IncSearch",  timeout = 150 })
+		vim.highlight.on_yank({
+			higroup = "IncSearch",
+			timeout = 150,
+		})
 	end,
 })
 
--- Open git commit message buffer in insert mode at the beginning of first line.
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "gitcommit",
 	callback = function()
@@ -35,7 +34,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- Close help buffer/window by pressing q key.
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "help",
 	callback = function()
