@@ -6,7 +6,6 @@ libxft
 libxinerama
 feh
 sxhkd
-unclutter
 pipewire
 pipewire-alsa
 pipewire-pulse
