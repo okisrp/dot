@@ -14,19 +14,21 @@ xrandr --size 1920x1080 &
 
 xset s off -dpms &
 
-xautolock -time 10 -locker slock &
+# FIXME: It locks when watching videos.
+# xautolock -time 10 -locker slock &
 
 xset r rate 350 55 &
 
-setxkbmap -layout "us,ua" -option "grp:shifts_toggle" &
+setxkbmap -layout 'us,ua' -option 'grp:shifts_toggle' &
 
 if [ -f "$XDG_CONFIG_HOME/sxhkd/sxhkdrc" ]; then
 	sxhkd -c "$XDG_CONFIG_HOME/sxhkd/sxhkdrc"
 fi &
 
-xinput set-prop "Synaptics TM3336-001" "libinput Tapping Enabled" 1 &
+xinput set-prop 'Synaptics TM3336-001' 'libinput Tapping Enabled' 1 &
 
-unclutter --exclude-root --timeout 5 &
+# TODO: Make it hide cursor on key press.
+# unclutter --exclude-root --timeout 5 &
 
 if [ -e "$XDG_DATA_HOME/wallpapers/default" ]; then
 	feh --no-fehbg --bg-scale "$XDG_DATA_HOME/wallpapers/default"
