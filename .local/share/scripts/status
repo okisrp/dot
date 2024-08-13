@@ -64,7 +64,7 @@ brt() {
 }
 
 net() {
-	NET=$(ip -br a | grep -E '^(wl|enp).*(UP|UNKNOWN).*d+' | awk '{print $1}')
+	NET=$(ip -br a | grep -E '^(wl|enp).*(UP|UNKNOWN).*[[:digit:]]' | awk '{print $1}')
 
 	if [[ "$NET" == *enp* ]]; then
 		ST="$YLW-cable-$NC"
