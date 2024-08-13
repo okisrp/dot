@@ -38,6 +38,9 @@ vim.opt.splitright = true
 vim.wo.number = false
 vim.wo.relativenumber = false
 
+vim.opt.cmdheight = 0
+vim.opt.statusline = "%<%t [buf №%n] -%{mode()}-%= %r %h -%p%%- [%l:%c]"
+
 vim.opt.cursorline = true
 vim.opt.guicursor = ""
 vim.opt.mouse = "a"
@@ -47,6 +50,3 @@ vim.opt.listchars = {
 	tab = "¬ ",
 	trail = "·",
 }
-
-vim.opt.cmdheight = 0
-vim.opt.statusline = "%<%t [buf №%n]%= %r %h %{mode()} -%p%%- [%l:%c]"
