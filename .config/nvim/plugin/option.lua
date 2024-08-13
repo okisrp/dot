@@ -47,3 +47,6 @@ vim.opt.listchars = {
 	tab = "¬ ",
 	trail = "·",
 }
+
+vim.opt.cmdheight = 0
+vim.opt.statusline = "%<%t [buf №%n]%= %r %h %{mode()} -%p%%- [%l:%c]"

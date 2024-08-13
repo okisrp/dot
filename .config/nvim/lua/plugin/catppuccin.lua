@@ -22,7 +22,7 @@ return {
 				comments = {},
 			},
 			integrations = {
-				vim_sneak = true,
+				leap = true,
 				treesitter = true,
 				telescope = {
 					enabled = true,
